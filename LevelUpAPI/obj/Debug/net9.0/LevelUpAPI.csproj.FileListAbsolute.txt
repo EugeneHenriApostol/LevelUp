@@ -190,3 +190,4 @@ C:\Users\TRAINEE-APOSTOL\VSCode\LevelUp\levelupapi\obj\Debug\net9.0\refint\Level
 C:\Users\TRAINEE-APOSTOL\VSCode\LevelUp\levelupapi\obj\Debug\net9.0\LevelUpAPI.pdb
 C:\Users\TRAINEE-APOSTOL\VSCode\LevelUp\levelupapi\obj\Debug\net9.0\LevelUpAPI.genruntimeconfig.cache
 C:\Users\TRAINEE-APOSTOL\VSCode\LevelUp\levelupapi\obj\Debug\net9.0\ref\LevelUpAPI.dll
+C:\Users\TRAINEE-APOSTOL\VSCode\LevelUp\levelupapi\bin\Debug\net9.0\BCrypt.Net-Next.dll
