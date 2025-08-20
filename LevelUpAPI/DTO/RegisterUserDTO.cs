@@ -11,6 +11,6 @@ namespace LevelUpAPI.DTO
         public string LastName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;  // Will be hashed later
-        public string Role { get; set; } = "trainee"; // Default role
+        public string Role { get; set; } = "trainee"; // default role
     }
 }
