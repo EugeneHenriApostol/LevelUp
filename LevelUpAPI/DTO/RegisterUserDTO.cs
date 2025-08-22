@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 
-namespace LevelUpAPI.DTO
+namespace LevelUpAPI.Dto
 {
-    public class RegisterUserDTO
+    public class RegisterUserDto
     {
         [Required]
         [MaxLength(50)]

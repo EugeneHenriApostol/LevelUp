@@ -1,2 +1,3 @@
-/bin/
-/obj/
+# ---- .NET build output ----
+bin/
+obj/
