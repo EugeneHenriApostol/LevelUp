@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\TRAINEE-APOSTOL\\VSCode\\levelup\\levelupapi\\LevelUpAPI.csproj": {}
+    "C:\\Users\\TRAINEE-CABURAL\\OneDrive\\Projects\\OneDrive - N-PAX\\Projects\\Level\\LevelUp\\LevelUpAPI\\LevelUpAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\TRAINEE-APOSTOL\\VSCode\\levelup\\levelupapi\\LevelUpAPI.csproj": {
+    "C:\\Users\\TRAINEE-CABURAL\\OneDrive\\Projects\\OneDrive - N-PAX\\Projects\\Level\\LevelUp\\LevelUpAPI\\LevelUpAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\TRAINEE-APOSTOL\\VSCode\\levelup\\levelupapi\\LevelUpAPI.csproj",
+        "projectUniqueName": "C:\\Users\\TRAINEE-CABURAL\\OneDrive\\Projects\\OneDrive - N-PAX\\Projects\\Level\\LevelUp\\LevelUpAPI\\LevelUpAPI.csproj",
         "projectName": "LevelUpAPI",
-        "projectPath": "C:\\Users\\TRAINEE-APOSTOL\\VSCode\\levelup\\levelupapi\\LevelUpAPI.csproj",
-        "packagesPath": "C:\\Users\\TRAINEE-APOSTOL\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\TRAINEE-APOSTOL\\VSCode\\levelup\\levelupapi\\obj\\",
+        "projectPath": "C:\\Users\\TRAINEE-CABURAL\\OneDrive\\Projects\\OneDrive - N-PAX\\Projects\\Level\\LevelUp\\LevelUpAPI\\LevelUpAPI.csproj",
+        "packagesPath": "C:\\Users\\TRAINEE-CABURAL\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\TRAINEE-CABURAL\\OneDrive\\Projects\\OneDrive - N-PAX\\Projects\\Level\\LevelUp\\LevelUpAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\TRAINEE-APOSTOL\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\TRAINEE-CABURAL\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],

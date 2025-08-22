@@ -1,0 +1,532 @@
+/* TasksTrainee.css */
+
+* {
+    box-sizing: border-box;
+}
+
+.tasks-trainee-container {
+    min-height: 100vh;
+    background-color: #f8fafc;
+    padding: 2rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* Header Styles */
+.header-container {
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logo-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.25rem;
+}
+
+.logo-text h1 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.logo-text p {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Profile Dropdown */
+.profile-dropdown {
+    position: relative;
+}
+
+.profile-icon {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+
+.profile-icon:hover {
+    background-color: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+.profile-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+    /* Prevents the avatar from shrinking */
+}
+
+.profile-avatar svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* If you want to add a username or text next to the avatar */
+.profile-text {
+    color: #374151;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.profile-dropdown.open .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+/* Dropdown Overlay */
+.dropdown-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 998;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    min-width: 200px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    border: 1px solid #e2e8f0;
+    z-index: 999;
+    overflow: hidden;
+    animation: dropdownFadeIn 0.2s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    color: #1e293b;
+}
+
+.dropdown-item:hover {
+    background-color: #f8fafc;
+}
+
+.dropdown-item.logout-item {
+    color: #dc2626;
+}
+
+.dropdown-item.logout-item:hover {
+    background-color: #fef2f2;
+}
+
+.dropdown-icon {
+    display: flex;
+    align-items: center;
+    color: #64748b;
+}
+
+.dropdown-item.logout-item .dropdown-icon {
+    color: #dc2626;
+}
+
+.dropdown-item span {
+    font-weight: 500;
+    font-size: 0.875rem;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background-color: #e2e8f0;
+    margin: 0.5rem 0;
+}
+
+
+/* Welcome Section */
+.welcome-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 24px 0 16px 0;
+}
+
+/* Stats Panel */
+.stats-panel {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    flex: 1;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f1f5f9;
+    transition: all 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.stat-number {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 4px;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: #64748b;
+    font-weight: 500;
+}
+
+/* Navigation Tabs */
+.navigation-tabs {
+    margin: 24px 0;
+}
+
+.tabs-container {
+    display: flex;
+    background: #f1f5f9;
+    padding: 4px;
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+}
+
+.tab-btn {
+    flex: 1;
+    text-align: center;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-weight: 500;
+    font-size: 14px;
+    text-decoration: none;
+    color: #64748b;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.tab-btn.active,
+.tab-btn[class*="bg-white"] {
+    background: white;
+    color: #1e293b;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    font-weight: 600;
+}
+
+.tab-btn:hover:not(.active):not([class*="bg-white"]) {
+    color: #374151;
+}
+
+/* Task Progress Section */
+.progress-section {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f1f5f9;
+}
+
+.progress-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 12px 0;
+}
+
+.progress-bar-container {
+    width: 100%;
+    background-color: #f1f5f9;
+    height: 12px;
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 8px 0;
+}
+
+.progress-bar {
+    background: linear-gradient(90deg, #1e293b, #374151);
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    font-size: 14px;
+    color: #64748b;
+    margin: 8px 0 0 0;
+}
+
+/* Task Cards */
+.task-cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.task-card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.task-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Task Status Border Colors */
+.task-card.completed {
+    border-left-color: #10b981;
+}
+
+.task-card.pending {
+    border-left-color: #6b7280;
+}
+
+.task-card.in-progress {
+    border-left-color: #3b82f6;
+}
+
+.task-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.task-description {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0 0 16px 0;
+    line-height: 1.5;
+}
+
+.task-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    gap: 12px;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 12px;
+    text-transform: capitalize;
+}
+
+.status-badge.completed {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.status-badge.pending {
+    background-color: #f3f4f6;
+    color: #374151;
+}
+
+.status-badge.in-progress {
+    background-color: #dbeafe;
+    color: #1d4ed8;
+}
+
+/* Points Badge */
+.points-badge {
+    background-color: #f1f5f9;
+    color: #64748b;
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 12px;
+}
+
+/* Due Date */
+.due-date {
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+/* Task Icons */
+.task-icon {
+    font-size: 16px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .tasks-trainee-container {
+        padding: 12px 16px;
+    }
+
+    .stats-panel {
+        flex-direction: column;
+    }
+
+    .task-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .task-meta>div {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .welcome-title {
+        font-size: 16px;
+    }
+
+    .stat-number {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .trainee-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .tabs-container {
+        flex-direction: column;
+    }
+
+    .tab-btn {
+        text-align: left;
+    }
+}
+
+/* Loading and Animation States */
+.task-card.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.progress-bar {
+    animation: progress-fill 1s ease-out;
+}
+
+@keyframes progress-fill {
+    from {
+        width: 0%;
+    }
+}
+
+/* Focus States for Accessibility */
+.tab-btn:focus,
+.task-card:focus {
+    outline: 2px solid #6366f1;
+    outline-offset: 2px;
+}
+
+/* Dark Mode Support (Optional) */
+@media (prefers-color-scheme: dark) {
+    .tasks-trainee-container {
+        background-color: #0f172a;
+        color: #e2e8f0;
+    }
+
+    .stat-card,
+    .progress-section,
+    .task-card {
+        background-color: #1e293b;
+        border-color: #334155;
+    }
+
+    .logo-title,
+    .welcome-title,
+    .progress-title,
+    .task-title {
+        color: #f1f5f9;
+    }
+
+    .stat-label,
+    .task-description,
+    .progress-text {
+        color: #94a3b8;
+    }
+
+    .tabs-container {
+        background-color: #334155;
+    }
+
+    .tab-btn.active,
+    .tab-btn[class*="bg-white"] {
+        background-color: #475569;
+        color: #f1f5f9;
+    }
+}
