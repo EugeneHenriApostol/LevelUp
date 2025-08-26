@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using LevelUpAPI.Data;
 using LevelUpAPI.Models;
-using LevelUpAPI.DTO;
+using LevelUpAPI.Dto;
 using Microsoft.EntityFrameworkCore;
 
 namespace LevelUpAPI.Controllers
@@ -18,7 +18,7 @@ namespace LevelUpAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterUserDTO dto)
+        public async Task<IActionResult> Register(RegisterUserDto dto)
         {
             // 1. Check if email already exists
             var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
