@@ -21,7 +21,7 @@ namespace LevelUpAPI.Controller
         {
             _context = context;
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> GetAllTasks()
         {
@@ -39,7 +39,7 @@ namespace LevelUpAPI.Controller
                 .ToListAsync();
 
             return Ok(tasks);
-        }   
+        }
 
         // POST: api/task
         [Authorize(Roles = "Trainer")]
@@ -76,6 +76,45 @@ namespace LevelUpAPI.Controller
                 DueDate = task.DueDate,
                 CreatedById = task.CreatedById,
                 CreatedByName = $"{trainer.FirstName} {trainer.LastName}"
+            });
+        }
+        // PUT: api/task/{id}
+        [Authorize(Roles = "Trainer,Admin")]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateTask(int id, [FromBody] CreateTaskDto dto)
+        {
+            var task = await _context.Tasks.Include(t => t.CreatedBy).FirstOrDefaultAsync(t => t.TaskId == id);
+            if (task == null)
+            {
+                return NotFound(new { message = "Task not found." });
+            }
+
+            // Optional: Verify that the trainer updating is the same as the creator
+            if (task.CreatedById != dto.CreatedById)
+            {
+                return BadRequest(new { message = "You can only update tasks you created." });
+            }
+
+            // Update task fields
+            task.Title = dto.Title;
+            task.Description = dto.Description;
+            task.DueDate = dto.DueDate;
+
+            _context.Tasks.Update(task);
+            await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                message = "Task updated successfully!",
+                task = new CreateTaskResponse
+                {
+                    TaskId = task.TaskId,
+                    Title = task.Title,
+                    Description = task.Description,
+                    DueDate = task.DueDate,
+                    CreatedById = task.CreatedById,
+                    CreatedByName = $"{task.CreatedBy.FirstName} {task.CreatedBy.LastName}"
+                }
             });
         }
     }
