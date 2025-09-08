@@ -8,11 +8,11 @@ namespace LevelUpAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class RegistrationController : ControllerBase
+    public class SignUpController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public RegistrationController(AppDbContext context)
+        public SignUpController(AppDbContext context)
         {
             _context = context;
         }
