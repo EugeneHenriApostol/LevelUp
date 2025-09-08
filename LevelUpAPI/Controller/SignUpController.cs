@@ -17,6 +17,26 @@ namespace LevelUpAPI.Controllers
             _context = context;
         }
 
+        // GET: api/Registration
+        [HttpGet]
+
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var users = await _context.Users
+                .Select(u => new
+                {
+                    u.UserId,
+                    u.FirstName,
+                    u.LastName,
+                    u.Email,
+                    u.Role,
+                    u.CreatedAt
+                })
+                .ToListAsync();
+
+            return Ok(users);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Register(RegisterUserDto dto)
         {
@@ -58,6 +78,8 @@ namespace LevelUpAPI.Controllers
                     user.Role,
                     user.CreatedAt
                 }
+
+                
             });
         }
 
