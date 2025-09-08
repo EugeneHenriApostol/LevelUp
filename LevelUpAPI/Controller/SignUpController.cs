@@ -17,7 +17,10 @@ namespace LevelUpAPI.Controllers
             _context = context;
         }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e63ada44da0baa41b2be862f287bc73faabe7d93
         [HttpPost]
         public async Task<IActionResult> Register(RegisterUserDto dto)
         {
@@ -59,10 +62,58 @@ namespace LevelUpAPI.Controllers
                     user.Role,
                     user.CreatedAt
                 }
+<<<<<<< HEAD
 
                 
+=======
+>>>>>>> e63ada44da0baa41b2be862f287bc73faabe7d93
             });
         }
+        // Update User details
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(int id, RegisterUserDto dto)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found." });
+            }
+
+            // Update fields
+            user.FirstName = dto.FirstName;
+            user.LastName = dto.LastName;
+            user.Email = dto.Email;
+            user.Role = dto.Role;
+
+            // Update password if new one is provided
+            if (!string.IsNullOrWhiteSpace(dto.Password))
+            {
+                user.Password = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+            }
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                message = "User updated successfully!",
+                user = new
+                {
+                    user.UserId,
+                    user.FirstName,
+                    user.LastName,
+                    user.Email,
+                    user.Role,
+                    user.CreatedAt
+                }
+            });
+        }
+        
+
+        
     }
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> e63ada44da0baa41b2be862f287bc73faabe7d93
