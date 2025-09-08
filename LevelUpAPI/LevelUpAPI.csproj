@@ -18,6 +18,10 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
+<<<<<<< HEAD
+=======
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="9.0.3" />
+>>>>>>> 4c67f24651c1651e2bd66b7556f27d78c24247c0
   </ItemGroup>
 
 </Project>
