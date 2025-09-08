@@ -117,5 +117,22 @@ namespace LevelUpAPI.Controller
                 }
             });
         }
+
+        // delete a task
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTask(int id)
+        {
+            var task = await _context.Tasks.FindAsync(id);
+            if (task == null)
+            {
+                return NotFound(new { message = "Task not found." });
+            }
+
+            _context.Tasks.Remove(task);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "User account deleted successfully." });
+        }
+
     }
 }
