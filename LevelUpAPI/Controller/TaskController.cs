@@ -22,7 +22,7 @@ namespace LevelUpAPI.Controller
             _context = context;
         }
         
-        [HttpGet("alltasks")]
+        [HttpGet]
         public async Task<IActionResult> GetAllTasks()
         {
             var tasks = await _context.Tasks

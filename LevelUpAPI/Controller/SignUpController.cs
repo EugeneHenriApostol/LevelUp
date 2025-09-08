@@ -17,25 +17,6 @@ namespace LevelUpAPI.Controllers
             _context = context;
         }
 
-        // GET: api/Registration
-        [HttpGet]
-
-        public async Task<IActionResult> GetAllUsers()
-        {
-            var users = await _context.Users
-                .Select(u => new
-                {
-                    u.UserId,
-                    u.FirstName,
-                    u.LastName,
-                    u.Email,
-                    u.Role,
-                    u.CreatedAt
-                })
-                .ToListAsync();
-
-            return Ok(users);
-        }
 
         [HttpPost]
         public async Task<IActionResult> Register(RegisterUserDto dto)
@@ -81,21 +62,6 @@ namespace LevelUpAPI.Controllers
 
                 
             });
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAccount(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound(new { message = "User not found." });
-            }
-
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = "User account deleted successfully." });
         }
     }
 }
