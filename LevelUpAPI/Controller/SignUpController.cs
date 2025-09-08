@@ -17,10 +17,6 @@ namespace LevelUpAPI.Controllers
             _context = context;
         }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> e63ada44da0baa41b2be862f287bc73faabe7d93
         [HttpPost]
         public async Task<IActionResult> Register(RegisterUserDto dto)
         {
@@ -62,11 +58,8 @@ namespace LevelUpAPI.Controllers
                     user.Role,
                     user.CreatedAt
                 }
-<<<<<<< HEAD
 
                 
-=======
->>>>>>> e63ada44da0baa41b2be862f287bc73faabe7d93
             });
         }
         // Update User details
@@ -113,7 +106,3 @@ namespace LevelUpAPI.Controllers
         
     }
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> e63ada44da0baa41b2be862f287bc73faabe7d93
