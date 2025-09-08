@@ -72,53 +72,6 @@ namespace LevelUpAPI.Migrations
                     b.ToTable("TaskAssignments");
                 });
 
-            modelBuilder.Entity("LevelUpAPI.Models.Task", b =>
-                {
-                    b.Property<int>("TaskId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("AutoAccept")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("CreatedById")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Points")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("TaskId");
-
-                    b.HasIndex("CreatedById");
-
-                    b.ToTable("Tasks");
-                });
-
-            modelBuilder.Entity("LevelUpAPI.Models.TaskAssignment", b =>
-                {
-                    b.Property<int>("TaskAssignmentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("AssignedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("TaskId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("TaskAssignmentId");
-
-                    b.HasIndex("TaskId");
-
-                    b.ToTable("TaskAssignments");
-                });
-
             modelBuilder.Entity("LevelUpAPI.Models.User", b =>
                 {
                     b.Property<int>("UserId")
