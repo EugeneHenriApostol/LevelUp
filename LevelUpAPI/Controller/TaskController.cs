@@ -21,9 +21,28 @@ namespace LevelUpAPI.Controller
         {
             _context = context;
         }
+        
+        [HttpGet("alltasks")]
+        public async Task<IActionResult> GetAllTasks()
+        {
+            var tasks = await _context.Tasks
+                .Include(t => t.CreatedBy)
+                .Select(t => new
+                {
+                    t.TaskId,
+                    t.Title,
+                    t.Description,
+                    t.DueDate,
+                    t.CreatedById,
+                    CreatedByName = $"{t.CreatedBy.FirstName} {t.CreatedBy.LastName}"
+                })
+                .ToListAsync();
+
+            return Ok(tasks);
+        }   
 
         // POST: api/task
-        [Authorize (Roles = "Trainer")]
+        [Authorize(Roles = "Trainer")]
         [HttpPost]
         public async Task<IActionResult> CreateTask([FromBody] CreateTaskDto dto)
         {
