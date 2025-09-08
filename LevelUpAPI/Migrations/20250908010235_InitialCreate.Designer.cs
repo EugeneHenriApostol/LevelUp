@@ -4,6 +4,7 @@ using LevelUpAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LevelUpAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250908010235_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,53 +67,6 @@ namespace LevelUpAPI.Migrations
 
                     b.Property<int>("TaskId")
                         .HasColumnType("int");
-
-                    b.HasKey("TaskAssignmentId");
-
-                    b.HasIndex("TaskId");
-
-                    b.ToTable("TaskAssignments");
-                });
-
-            modelBuilder.Entity("LevelUpAPI.Models.Task", b =>
-                {
-                    b.Property<int>("TaskId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("AutoAccept")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("CreatedById")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Points")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("TaskId");
-
-                    b.HasIndex("CreatedById");
-
-                    b.ToTable("Tasks");
-                });
-
-            modelBuilder.Entity("LevelUpAPI.Models.TaskAssignment", b =>
-                {
-                    b.Property<int>("TaskAssignmentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("AssignedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("TaskId")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("TaskAssignmentId");
 
