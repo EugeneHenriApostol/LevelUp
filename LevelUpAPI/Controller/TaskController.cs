@@ -1,63 +1,67 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using LevelUpAPI.Models;
-using LevelUpAPI.Data;
-using LevelUpAPI.DTO;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using LevelUpAPI.Models;
+    using LevelUpAPI.Data;
+    using LevelUpAPI.DTO;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.AspNetCore.Authorization;
 
-namespace LevelUpAPI.Controller
-{
-    [ApiController]
-    [Route("api/[controller]")]
-    public class TaskController : ControllerBase
+    namespace LevelUpAPI.Controller
     {
-        private readonly AppDbContext _context;
-
-        public TaskController(AppDbContext context)
+        [ApiController]
+        [Route("api/[controller]")]
+        public class TaskController : ControllerBase
         {
-            _context = context;
-        }
+            private readonly AppDbContext _context;
 
-        // POST: api/task
-        [Authorize (Roles = "Trainer")]
-        [HttpPost]
-        public async Task<IActionResult> CreateTask([FromBody] CreateTaskDto dto)
-        {
-            // validate to make sure trainer is the one creating task
-            var trainer = await _context.Users.FirstOrDefaultAsync(u => u.UserId == dto.CreatedById && u.Role == "Trainer");
-            if (trainer == null)
+            public TaskController(AppDbContext context)
             {
-                return BadRequest(new { message = "Invalid Trainer ID or User is not a Trainer" });
+                _context = context;
             }
 
-            // map dto to task model
-            var task = new Models.Task
+            // POST: api/task
+            [Authorize(Roles = "Trainer")]
+            [HttpPost]
+            public async Task<IActionResult> CreateTask([FromBody] CreateTaskDto dto)
             {
-                Title = dto.Title,
-                Description = dto.Description,
-                DueDate = dto.DueDate,
-                CreatedById = dto.CreatedById,
-                CreatedBy = trainer,
-            };
+                // validate to make sure trainer is the one creating task
+                var trainer = await _context.Users.FirstOrDefaultAsync(u => u.UserId == dto.CreatedById && u.Role == "Trainer");
+                if (trainer == null)
+                {
+                    return BadRequest(new { message = "Invalid Trainer ID or User is not a Trainer" });
+                }
 
-            // save to db
-            _context.Tasks.Add(task);
-            await _context.SaveChangesAsync();
+                // map dto to task model
+                var task = new Models.Task
+                {
+                    Title = dto.Title,
+                    Description = dto.Description,
+                    DueDate = dto.DueDate,
+                    CreatedById = dto.CreatedById,
+                    CreatedBy = trainer,
+                };
 
-            // return response
-            return Ok(new CreateTaskResponse
-            {
-                TaskId = task.TaskId,
-                Title = task.Title,
-                Description = task.Description,
-                DueDate = task.DueDate,
-                CreatedById = task.CreatedById,
-                CreatedByName = $"{trainer.FirstName} {trainer.LastName}"
-            });
+                // save to db
+                _context.Tasks.Add(task);
+                await _context.SaveChangesAsync();
+
+                // return response
+                return Ok(new CreateTaskResponse
+                {
+                    TaskId = task.TaskId,
+                    Title = task.Title,
+                    Description = task.Description,
+                    DueDate = task.DueDate,
+                    CreatedById = task.CreatedById,
+                    CreatedByName = $"{trainer.FirstName} {trainer.LastName}"
+                });
+            }
+            
+            
+            
+
         }
     }
-}
