@@ -9,12 +9,12 @@ const Signup = () => {
 
   // State for form inputs
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    role: "",
-  });
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      role: "",
+    });
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -34,7 +34,7 @@ const Signup = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5250/api/register", {
+      const response = await fetch("http://localhost:5250/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -42,13 +42,12 @@ const Signup = () => {
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json().catch(() => null); // ✅ handle empty body safely
+      const data = await response.json().catch(() => null);
 
       if (!response.ok) {
-        throw new Error(data?.message || "Signup failed");
+        throw new Error(data?.message || JSON.stringify(data) || "Signup failed");
       }
 
-      // ✅ User registered successfully
       alert("Signup successful! Please login.");
       navigate("/login");
     } catch (err) {
@@ -140,7 +139,7 @@ const Signup = () => {
             />
           </div>
 
-           {/* 👇 Role Dropdown */}
+          {/* Role Dropdown */}
           <div className="form-group">
             <label className="form-label">Role</label>
             <select
@@ -150,9 +149,9 @@ const Signup = () => {
               onChange={handleChange}
               required
             >
-            <option value="" disabled>
-              -- Select Role --
-            </option>
+              <option value="" disabled>
+                -- Select Role --
+              </option>
               <option value="trainer">Trainer</option>
               <option value="trainee">Trainee</option>
             </select>
@@ -164,8 +163,6 @@ const Signup = () => {
             {loading ? "Signing up..." : "Sign Up"}
           </button>
         </form>
-
-        
       </div>
     </div>
   );

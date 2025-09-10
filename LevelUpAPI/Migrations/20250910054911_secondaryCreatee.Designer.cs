@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LevelUpAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250909233043_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250910054911_secondaryCreatee")]
+    partial class secondaryCreatee
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
