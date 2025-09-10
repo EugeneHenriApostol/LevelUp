@@ -96,5 +96,47 @@ namespace LevelUpAPI.Controller
             return Ok(new { message = "Logged out successfully" });
         }
 
+
+
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto dto)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
+            if (user == null)
+                return NotFound(new { message = "Email not registered" });
+
+            // Generate reset token (GUID for example)
+            var resetToken = Guid.NewGuid().ToString();
+            user.ResetToken = resetToken;
+            user.ResetTokenExpiry = DateTime.UtcNow.AddHours(1);
+            await _context.SaveChangesAsync();
+
+            // Send email with reset link (optional)
+            // var link = $"https://yourfrontend.com/confirm-password?email={user.Email}&token={resetToken}";
+            // await _emailService.SendPasswordResetEmail(user.Email, link);
+
+            return Ok(new { message = "Password reset link sent successfully",token = resetToken });
+            
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
+            if (user == null)
+                return NotFound(new { message = "Email not registered" });
+
+            if (user.ResetToken != dto.Token || user.ResetTokenExpiry < DateTime.UtcNow)
+                return BadRequest(new { message = "Invalid or expired token" });
+
+            user.Password = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
+            user.ResetToken = null;
+            user.ResetTokenExpiry = null;
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Password reset successfully" });
+        }
+
     }
 }
