@@ -23,6 +23,7 @@ namespace LevelUpAPI.Controller
         }
 
         [HttpGet]
+        [Authorize(Roles = "Trainer")]
         public async Task<IActionResult> GetAllTasks()
         {
             var tasks = await _context.Tasks
@@ -79,7 +80,7 @@ namespace LevelUpAPI.Controller
             });
         }
         // PUT: api/task/{id}
-        [Authorize(Roles = "Trainer,Admin")]
+        [Authorize(Roles = "Trainer")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTask(int id, [FromBody] CreateTaskDto dto)
         {
@@ -120,6 +121,7 @@ namespace LevelUpAPI.Controller
 
         // delete a task
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Trainer")]
         public async Task<IActionResult> DeleteTask(int id)
         {
             var task = await _context.Tasks.FindAsync(id);
