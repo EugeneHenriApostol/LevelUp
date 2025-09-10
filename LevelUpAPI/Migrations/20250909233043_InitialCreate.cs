@@ -30,6 +30,28 @@ namespace LevelUpAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LoginHistories",
+                columns: table => new
+                {
+                    LoginHistoryId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LoginTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IpAddress = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LoginHistories", x => x.LoginHistoryId);
+                    table.ForeignKey(
+                        name: "FK_LoginHistories_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tasks",
                 columns: table => new
                 {
@@ -72,6 +94,11 @@ namespace LevelUpAPI.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_LoginHistories_UserId",
+                table: "LoginHistories",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TaskAssignments_TaskId",
                 table: "TaskAssignments",
                 column: "TaskId");
@@ -85,6 +112,9 @@ namespace LevelUpAPI.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "LoginHistories");
+
             migrationBuilder.DropTable(
                 name: "TaskAssignments");
 

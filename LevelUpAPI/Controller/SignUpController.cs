@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace LevelUpAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     public class SignUpController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -17,9 +17,34 @@ namespace LevelUpAPI.Controllers
             _context = context;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Register(RegisterUserDto dto)
+        // Get all users
+        [HttpGet("users")]  
+        public async Task<IActionResult> GetAllUsers()
         {
+            var users = await _context.Users
+                .Select(u => new
+                {
+                    u.UserId,
+                    u.FirstName,
+                    u.LastName,
+                    u.Email,
+                    u.Role,
+                    u.CreatedAt
+                })
+                .ToListAsync();
+
+            return Ok(users);
+        }   
+
+        // User Registration
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterUserDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { message = "Invalid data.", errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
+            }
+
             // 1. Check if email already exists
             var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
             if (existingUser != null)
@@ -58,13 +83,26 @@ namespace LevelUpAPI.Controllers
                     user.Role,
                     user.CreatedAt
                 }
-
-                
             });
         }
+
+        // Delete User by ID
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+                return NotFound(new { message = "User not found" });
+
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "User deleted successfully" });
+        }   
+
         // Update User details
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(int id, RegisterUserDto dto)
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] RegisterUserDto dto)
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null)
@@ -101,8 +139,8 @@ namespace LevelUpAPI.Controllers
                 }
             });
         }
-        
 
-        
+
+
     }
 }
