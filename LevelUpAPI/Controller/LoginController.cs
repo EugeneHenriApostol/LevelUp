@@ -11,7 +11,7 @@ using System.Text;
 namespace LevelUpAPI.Controller
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/auth/login")]
     public class LoginController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -23,8 +23,40 @@ namespace LevelUpAPI.Controller
             _configuration = configuration;
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserById(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+                return NotFound(new { message = "User not found" });
+
+            return Ok(new
+            {
+                user.UserId,
+                user.FirstName,
+                user.LastName,
+                user.Email,
+                user.Role,
+                user.CreatedAt
+            });
+        }
+
+        // Delete User by ID
+        [HttpDelete("{id}")]   
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+                return NotFound(new { message = "User not found" });
+
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "User deleted successfully" });
+        }   
+
         [HttpPost]
-        public async Task<IActionResult> Login(LoginUserDto dto)
+        public async Task<IActionResult> Login([FromBody] LoginUserDto dto)
         {
             // 1. Check if user exists
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
@@ -38,12 +70,26 @@ namespace LevelUpAPI.Controller
             // 3. Generate JWT token
             var token = GenerateJwtToken(user);
 
-            // 4. Return response
+            // 4. Save Login History in DB
+            var loginHistory = new LoginHistory
+            {
+                UserId = user.UserId,
+                LoginTime = DateTime.UtcNow,
+                Email = user.Email ?? dto.Email,
+                IpAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown"
+            };
+            _context.LoginHistories.Add(loginHistory);
+            await _context.SaveChangesAsync();
+
+            // 5. Return response
             return Ok(new LoginResponseDto
             {
                 Token = token,
                 Role = user.Role,
-                UserId = user.UserId
+                UserId = user.UserId,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email
             });
         }
 

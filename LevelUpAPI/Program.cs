@@ -7,16 +7,20 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+// Add services to the container
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+// Swagger + JWT configuration
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "LevelUp API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "LevelUp API",
+        Version = "v1"
+    });
 
-    // add jwt bearer
+    // Add JWT authentication to Swagger
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -35,15 +39,15 @@ builder.Services.AddSwaggerGen(c =>
                 Reference = new OpenApiReference
                 {
                     Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer",
+                    Id = "Bearer"
                 }
             },
             Array.Empty<string>()
         }
     });
 });
-builder.Services.AddControllers();  
 
+// Database connection
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -52,9 +56,9 @@ var jwtSettings = builder.Configuration.GetSection("Jwt");
 var jwtKey = jwtSettings["Key"];
 
 if (string.IsNullOrEmpty(jwtKey))
-{
+
     throw new InvalidOperationException("JWT Key is not configured.");
-}
+
 
 builder.Services.AddAuthentication(options =>
 {
@@ -76,21 +80,33 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// CORS Policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173") // ✅ correct method
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+app.UseCors("AllowFrontend");
+
+app.UseHttpsRedirection();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseHttpsRedirection();
 app.MapControllers();
-
 
 app.Run();
