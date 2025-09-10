@@ -46,7 +46,7 @@ const Login = () => {
       // Redirect based on role
       if (data.role === 'Trainer') {
         navigate('/overviewtrainer');
-      } else  if (data.role === 'trainee'){
+      } else  if (data.role === 'Trainee'){
         navigate('/overviewtrainee');
       } else {
         navigate('/landingpage');

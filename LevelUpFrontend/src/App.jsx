@@ -4,7 +4,6 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import OverviewTrainee from "./pages/OverviewTrainee";
 import OverviewTrainer from "./pages/OverviewTrainer";
-import ForgotPassword from "./pages/ForgotPassword";
 
 
 export default function App() {
@@ -17,7 +16,6 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/overviewtrainee" element={<OverviewTrainee />} />
         <Route path="/overviewtrainer" element={<OverviewTrainer />} />
-        <Route path="/forgotpassword" element={<ForgotPassword />} />
 
       </Routes>
     </Router>
