@@ -6,13 +6,32 @@ import LevelUpLogo from '../assets/LevelUp.png';
 const OverviewTrainer = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [fullName, setFullName] = useState("User");
+  const [isAuthorized, setIsAuthorized] = useState(true); // new state
 
   useEffect(() => {
-    const firstName = localStorage.getItem("firstName");
-    const lastName = localStorage.getItem("lastName");
-    if (firstName && lastName) {
-      setFullName(`${JSON.parse(firstName)} ${JSON.parse(lastName)}`);
-    }
+    const fetchUser = async () => {
+      try {
+        const response = await fetch("http://localhost:5250/api/Account/me", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setFullName(`${data.firstName} ${data.lastName}`);
+          setIsAuthorized(true);
+        } else if (response.status === 401) {
+          setIsAuthorized(false);
+        } else {
+          console.error("Failed to fetch user");
+        }
+      } catch (error) {
+        console.error("Error fetching user:", error);
+        setIsAuthorized(false);
+      }
+    };
+
+    fetchUser();
   }, []);
 
   const toggleDropdown = () => {
@@ -23,9 +42,28 @@ const OverviewTrainer = () => {
     setIsDropdownOpen(false);
   };
 
-  const handleLogout = () => {
-    localStorage.clear();
-    window.location.href = '/landingpage'; 
+  const handleLogout = async () => {
+    try {
+      await fetch("http://localhost:5250/api/login/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+      localStorage.clear();
+    } catch (error) {
+      console.error("Logout error", error);
+    } finally {
+      window.location.href = "/landingpage";
+    }
+  };
+
+  // 🔹 If not authorized, show "Please log in"
+  if (!isAuthorized) {
+    return (
+      <div className="unauthorized">
+        <h2>Unauthorized</h2>
+        <p>Please log in to view this page.</p>
+      </div>
+    );
   }
 
   return (
