@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import OverviewTrainee from "./pages/OverviewTrainee";
 import OverviewTrainer from "./pages/OverviewTrainer";
 import ForgotPassword from "./pages/ForgotPassword";
+import ConfirmPassword from "./pages/ConfirmPassword";
 
 
 export default function App() {
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/overviewtrainee" element={<OverviewTrainee />} />
         <Route path="/overviewtrainer" element={<OverviewTrainer />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
+        <Route path="/confirm-password" element={<ConfirmPassword />} />
 
       </Routes>
     </Router>
