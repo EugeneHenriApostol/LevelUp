@@ -11,7 +11,7 @@ using System.Text;
 namespace LevelUpAPI.Controller
 {
     [ApiController]
-    [Route("api/auth/login")]
+    [Route("api/[controller]")]
     public class LoginController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -23,40 +23,8 @@ namespace LevelUpAPI.Controller
             _configuration = configuration;
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserById(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-                return NotFound(new { message = "User not found" });
-
-            return Ok(new
-            {
-                user.UserId,
-                user.FirstName,
-                user.LastName,
-                user.Email,
-                user.Role,
-                user.CreatedAt
-            });
-        }
-
-        // Delete User by ID
-        [HttpDelete("{id}")]   
-        public async Task<IActionResult> DeleteUser(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-                return NotFound(new { message = "User not found" });
-
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = "User deleted successfully" });
-        }   
-
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginUserDto dto)
+        public async Task<IActionResult> Login(LoginUserDto dto)
         {
             // 1. Check if user exists
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
@@ -70,26 +38,23 @@ namespace LevelUpAPI.Controller
             // 3. Generate JWT token
             var token = GenerateJwtToken(user);
 
-            // 4. Save Login History in DB
-            var loginHistory = new LoginHistory
+            // configure cookie
+            Response.Cookies.Append("jwt", token, new CookieOptions
             {
-                UserId = user.UserId,
-                LoginTime = DateTime.UtcNow,
-                Email = user.Email ?? dto.Email,
-                IpAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown"
-            };
-            _context.LoginHistories.Add(loginHistory);
-            await _context.SaveChangesAsync();
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Lax,
+                Expires = DateTime.UtcNow.AddMinutes(60),
+            });
 
-            // 5. Return response
+            // 4. Return response
             return Ok(new LoginResponseDto
             {
-                Token = token,
                 Role = user.Role,
                 UserId = user.UserId,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Email = user.Email
+                Email = user.Email,
             });
         }
 
@@ -107,6 +72,7 @@ namespace LevelUpAPI.Controller
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
                 new Claim(ClaimTypes.Role, user.Role),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
@@ -122,5 +88,13 @@ namespace LevelUpAPI.Controller
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("jwt");
+            return Ok(new { message = "Logged out successfully" });
+        }
+
     }
 }

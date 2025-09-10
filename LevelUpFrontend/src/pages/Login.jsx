@@ -29,11 +29,10 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:5250/api/auth/login', {
+      const response = await fetch('http://localhost:5250/api/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(formData),
       });
 
@@ -44,16 +43,8 @@ const Login = () => {
 
       const data = await response.json();
 
-      // Save JWT token & user info in localStorage
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('role', data.role);
-      localStorage.setItem('userId', JSON.stringify(data.userId));
-      localStorage.setItem('firstName', JSON.stringify(data.firstName));
-      localStorage.setItem('lastName', JSON.stringify(data.lastName));
-      localStorage.setItem('email', JSON.stringify(data.email));
-
       // Redirect based on role
-      if (data.role === 'trainer') {
+      if (data.role === 'Trainer') {
         navigate('/overviewtrainer');
       } else  if (data.role === 'trainee'){
         navigate('/overviewtrainee');
