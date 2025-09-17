@@ -31,8 +31,8 @@ namespace LevelUpAPI.Controller
                 .Select(t => new
                 {
                     t.TaskId,
-                    t.Title,
-                    t.Description,
+                    t.TaskTitle,
+                    t.TaskDescription,
                     t.DueDate,
                     t.CreatedById,
                     CreatedByName = $"{t.CreatedBy.FirstName} {t.CreatedBy.LastName}"
@@ -57,8 +57,8 @@ namespace LevelUpAPI.Controller
             // map dto to task model
             var task = new Models.Task
             {
-                Title = dto.Title,
-                Description = dto.Description,
+                TaskTitle = dto.TaskTitle,
+                TaskDescription = dto.TaskDescription,
                 DueDate = dto.DueDate,
                 CreatedById = dto.CreatedById,
                 CreatedBy = trainer,
@@ -68,13 +68,26 @@ namespace LevelUpAPI.Controller
             _context.Tasks.Add(task);
             await _context.SaveChangesAsync();
 
+            // assign task to all trainees
+            var trainees = await _context.Users.Where(u => u.Role == "Trainee").ToListAsync();
+            var assignments = trainees.Select(t => new TaskAssignment
+            {
+                TaskId = task.TaskId,
+                TraineeId = t.UserId,
+            }).ToList();
+
+            _context.TaskAssignments.AddRange(assignments);
+
+            await _context.SaveChangesAsync();
+
             // return response
             return Ok(new CreateTaskResponse
             {
                 TaskId = task.TaskId,
-                Title = task.Title,
-                Description = task.Description,
+                TaskTitle = task.TaskTitle,
+                TaskDescription = task.TaskDescription,
                 DueDate = task.DueDate,
+                Points = task.Points,
                 CreatedById = task.CreatedById,
                 CreatedByName = $"{trainer.FirstName} {trainer.LastName}"
             });
@@ -97,8 +110,8 @@ namespace LevelUpAPI.Controller
             }
 
             // Update task fields
-            task.Title = dto.Title;
-            task.Description = dto.Description;
+            task.TaskTitle = dto.TaskTitle;
+            task.TaskDescription = dto.TaskDescription;
             task.DueDate = dto.DueDate;
 
             _context.Tasks.Update(task);
@@ -110,8 +123,8 @@ namespace LevelUpAPI.Controller
                 task = new CreateTaskResponse
                 {
                     TaskId = task.TaskId,
-                    Title = task.Title,
-                    Description = task.Description,
+                    TaskTitle = task.TaskTitle,
+                    TaskDescription = task.TaskDescription,
                     DueDate = task.DueDate,
                     CreatedById = task.CreatedById,
                     CreatedByName = $"{task.CreatedBy.FirstName} {task.CreatedBy.LastName}"
