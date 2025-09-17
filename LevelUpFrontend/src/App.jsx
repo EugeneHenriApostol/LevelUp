@@ -5,7 +5,6 @@ import Login from "./pages/Login";
 import OverviewTrainee from "./pages/OverviewTrainee";
 import OverviewTrainer from "./pages/OverviewTrainer";
 
-
 export default function App() {
   return (
     <Router>
