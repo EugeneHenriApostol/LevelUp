@@ -22,5 +22,7 @@ namespace LevelUpAPI.Models
         // points assigned by Trainer
         public int? PointsAwarded { get; set; }
         public bool IsGraded { get; set; } = false;
+        public string? FeedBack { get; set; }
+        public int GradedById { get; set; }
     }
 }

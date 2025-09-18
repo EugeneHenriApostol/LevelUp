@@ -13,6 +13,6 @@ namespace LevelUpAPI.Models
         public int TotalPoints { get; set; } = 0;
 
         // navigation property for all task assignments of this user
-        public List<TaskAssignment> Assignments { get; set; } = []
+        public List<TaskAssignment> Assignments { get; set; } = [];
     }
 }
