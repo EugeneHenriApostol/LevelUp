@@ -12,6 +12,19 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Server=db;Database=LevelUpDB;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=true;
   
+  frontend:
+    build:
+      context: ./LevelUpFrontEnd
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: http://localhost:5000
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+    environment:
+      - API_URL= http://api:8080
+
   db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: levelup-sqlserver
