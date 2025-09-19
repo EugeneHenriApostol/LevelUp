@@ -10,9 +10,7 @@ namespace LevelUpAPI.Models
         public string Role { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public int TotalPoints { get; set; } = 0;
-
-        // navigation property for all task assignments of this user
-        public List<TaskAssignment> Assignments { get; set; } = [];
+         public string? ResetToken { get; set; }       // nullable
+        public DateTime? ResetTokenExpiry { get; set; } // nullable
     }
 }

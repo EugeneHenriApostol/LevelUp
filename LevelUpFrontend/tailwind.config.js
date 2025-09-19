@@ -2,11 +2,7 @@
 export default {
   content: [],
   theme: {
-    extend: {
-      fontFamily: {
-        sans: ["Poppins", "sans-serif"],
-      },
-    },
+    extend: {},
   },
   plugins: [],
 }

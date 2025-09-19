@@ -4,6 +4,7 @@ using LevelUpAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LevelUpAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250910054911_secondaryCreatee")]
+    partial class secondaryCreatee
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,35 @@ namespace LevelUpAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("LevelUpAPI.Models.LoginHistory", b =>
+                {
+                    b.Property<int>("LoginHistoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LoginHistoryId"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IpAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LoginTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("LoginHistoryId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("LoginHistories");
+                });
 
             modelBuilder.Entity("LevelUpAPI.Models.Task", b =>
                 {
@@ -33,17 +65,14 @@ namespace LevelUpAPI.Migrations
                     b.Property<int>("CreatedById")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DueDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Points")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TaskDescription")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TaskTitle")
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -62,38 +91,15 @@ namespace LevelUpAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskAssignmentId"));
 
-                    b.Property<string>("FeedBack")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("GradedById")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsGraded")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("PointsAwarded")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SubmissionFilePath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SubmissionText")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("SubmittedAt")
+                    b.Property<DateTime>("AssignedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("TaskId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TraineeId")
-                        .HasColumnType("int");
-
                     b.HasKey("TaskAssignmentId");
 
                     b.HasIndex("TaskId");
-
-                    b.HasIndex("TraineeId");
 
                     b.ToTable("TaskAssignments");
                 });
@@ -129,12 +135,20 @@ namespace LevelUpAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TotalPoints")
-                        .HasColumnType("int");
-
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("LevelUpAPI.Models.LoginHistory", b =>
+                {
+                    b.HasOne("LevelUpAPI.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("LevelUpAPI.Models.Task", b =>
@@ -142,7 +156,7 @@ namespace LevelUpAPI.Migrations
                     b.HasOne("LevelUpAPI.Models.User", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("CreatedBy");
@@ -151,30 +165,12 @@ namespace LevelUpAPI.Migrations
             modelBuilder.Entity("LevelUpAPI.Models.TaskAssignment", b =>
                 {
                     b.HasOne("LevelUpAPI.Models.Task", "Task")
-                        .WithMany("Assignments")
+                        .WithMany()
                         .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LevelUpAPI.Models.User", "Trainee")
-                        .WithMany("Assignments")
-                        .HasForeignKey("TraineeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Task");
-
-                    b.Navigation("Trainee");
-                });
-
-            modelBuilder.Entity("LevelUpAPI.Models.Task", b =>
-                {
-                    b.Navigation("Assignments");
-                });
-
-            modelBuilder.Entity("LevelUpAPI.Models.User", b =>
-                {
-                    b.Navigation("Assignments");
                 });
 #pragma warning restore 612, 618
         }
