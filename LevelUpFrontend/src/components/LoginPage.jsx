@@ -8,6 +8,8 @@ export default function LoginPage() {
         password: ''
     });
     const [showPassword, setShowPassword] = useState(false);
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -17,8 +19,41 @@ export default function LoginPage() {
         }));
     };
 
-    const handleLogin = () => {
-        console.log('Login attempted:', formData);
+    const handleLogin = async () => {
+        setError(null);
+        setLoading(true);
+
+        try {
+            const response = await fetch("http://localhost:5000/api/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: "include", // recieve the cookie
+                body: JSON.stringify(formData)
+            });
+
+            if(!response.ok) {
+                const errorData = await response.json();
+                setError(errorData.message || "Login Failed");
+                return;
+            }
+
+            const data = await response.json();
+            console.log("Login successful", data);
+
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("role", data.role);
+
+            if (data.role == "Trainee") {
+                window.location.href = "/overviewtrainee"
+            } 
+        } catch (err) {
+            setError("Something went wrong. Please try again");
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleGoogleLogin = () => {
@@ -97,6 +132,7 @@ export default function LoginPage() {
                     {/* Login Button */}
                     <button
                         onClick={handleLogin}
+                        disabled={loading}
                         className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-4 rounded-lg transition-colors mt-6"
                     >
                         Login
