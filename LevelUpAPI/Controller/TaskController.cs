@@ -13,7 +13,7 @@ namespace LevelUpAPI.Controller
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class TaskController : ControllerBase
+    public class TaskController : BaseController
     {
         private readonly AppDbContext _context;
 
@@ -31,8 +31,8 @@ namespace LevelUpAPI.Controller
                 .Select(t => new
                 {
                     t.TaskId,
-                    t.Title,
-                    t.Description,
+                    t.TaskTitle,
+                    t.TaskDescription,
                     t.DueDate,
                     t.CreatedById,
                     CreatedByName = $"{t.CreatedBy.FirstName} {t.CreatedBy.LastName}"
@@ -47,8 +47,10 @@ namespace LevelUpAPI.Controller
         [HttpPost]
         public async Task<IActionResult> CreateTask([FromBody] CreateTaskDto dto)
         {
+            var trainerId = GetCurrentUserId();
+
             // validate to make sure trainer is the one creating task
-            var trainer = await _context.Users.FirstOrDefaultAsync(u => u.UserId == dto.CreatedById && u.Role == "Trainer");
+            var trainer = await _context.Users.FirstOrDefaultAsync(u => u.UserId == trainerId && u.Role == "Trainer");
             if (trainer == null)
             {
                 return BadRequest(new { message = "Invalid Trainer ID or User is not a Trainer" });
@@ -57,10 +59,11 @@ namespace LevelUpAPI.Controller
             // map dto to task model
             var task = new Models.Task
             {
-                Title = dto.Title,
-                Description = dto.Description,
+                TaskTitle = dto.TaskTitle,
+                TaskDescription = dto.TaskDescription,
                 DueDate = dto.DueDate,
-                CreatedById = dto.CreatedById,
+                Points = dto.Points,
+                CreatedById = trainerId,
                 CreatedBy = trainer,
             };
 
@@ -68,14 +71,27 @@ namespace LevelUpAPI.Controller
             _context.Tasks.Add(task);
             await _context.SaveChangesAsync();
 
+            // assign task to all trainees
+            var trainees = await _context.Users.Where(u => u.Role == "Trainee").ToListAsync();
+            var assignments = trainees.Select(t => new TaskAssignment
+            {
+                TaskId = task.TaskId,
+                TraineeId = t.UserId,
+            }).ToList();
+
+            _context.TaskAssignments.AddRange(assignments);
+
+            await _context.SaveChangesAsync();
+
             // return response
             return Ok(new CreateTaskResponse
             {
                 TaskId = task.TaskId,
-                Title = task.Title,
-                Description = task.Description,
+                TaskTitle = task.TaskTitle,
+                TaskDescription = task.TaskDescription,
                 DueDate = task.DueDate,
-                CreatedById = task.CreatedById,
+                Points = task.Points,
+                CreatedById = trainerId,
                 CreatedByName = $"{trainer.FirstName} {trainer.LastName}"
             });
         }
@@ -84,6 +100,8 @@ namespace LevelUpAPI.Controller
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTask(int id, [FromBody] CreateTaskDto dto)
         {
+            var trainerId = GetCurrentUserId();
+
             var task = await _context.Tasks.Include(t => t.CreatedBy).FirstOrDefaultAsync(t => t.TaskId == id);
             if (task == null)
             {
@@ -91,14 +109,14 @@ namespace LevelUpAPI.Controller
             }
 
             // Optional: Verify that the trainer updating is the same as the creator
-            if (task.CreatedById != dto.CreatedById)
+            if (task.CreatedById != trainerId)
             {
                 return BadRequest(new { message = "You can only update tasks you created." });
             }
 
             // Update task fields
-            task.Title = dto.Title;
-            task.Description = dto.Description;
+            task.TaskTitle = dto.TaskTitle;
+            task.TaskDescription = dto.TaskDescription;
             task.DueDate = dto.DueDate;
 
             _context.Tasks.Update(task);
@@ -110,10 +128,10 @@ namespace LevelUpAPI.Controller
                 task = new CreateTaskResponse
                 {
                     TaskId = task.TaskId,
-                    Title = task.Title,
-                    Description = task.Description,
+                    TaskTitle = task.TaskTitle,
+                    TaskDescription = task.TaskDescription,
                     DueDate = task.DueDate,
-                    CreatedById = task.CreatedById,
+                    CreatedById = trainerId,
                     CreatedByName = $"{task.CreatedBy.FirstName} {task.CreatedBy.LastName}"
                 }
             });
@@ -124,17 +142,24 @@ namespace LevelUpAPI.Controller
         [Authorize(Roles = "Trainer")]
         public async Task<IActionResult> DeleteTask(int id)
         {
+            var trainerId = GetCurrentUserId();
+
             var task = await _context.Tasks.FindAsync(id);
             if (task == null)
             {
                 return NotFound(new { message = "Task not found." });
             }
 
-            _context.Tasks.Remove(task);
+            // ensure that only trainers who created the task are allowed to delete task
+            if (task.CreatedById != trainerId)
+            {
+                return Forbid("You can only delete the task that you created");
+            }
+
+                _context.Tasks.Remove(task);
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = "User account deleted successfully." });
+            return Ok(new { message = "Task deleted successfully." });
         }
-
     }
 }

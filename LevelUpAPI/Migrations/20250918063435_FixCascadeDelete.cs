@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LevelUpAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class secondaryCreatee : Migration
+    public partial class FixCascadeDelete : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,33 +22,12 @@ namespace LevelUpAPI.Migrations
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TotalPoints = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.UserId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "LoginHistories",
-                columns: table => new
-                {
-                    LoginHistoryId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LoginTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IpAddress = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_LoginHistories", x => x.LoginHistoryId);
-                    table.ForeignKey(
-                        name: "FK_LoginHistories_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -57,9 +36,10 @@ namespace LevelUpAPI.Migrations
                 {
                     TaskId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TaskTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TaskDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Points = table.Column<int>(type: "int", nullable: false),
                     CreatedById = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -70,7 +50,7 @@ namespace LevelUpAPI.Migrations
                         column: x => x.CreatedById,
                         principalTable: "Users",
                         principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -80,7 +60,14 @@ namespace LevelUpAPI.Migrations
                     TaskAssignmentId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TaskId = table.Column<int>(type: "int", nullable: false),
-                    AssignedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    TraineeId = table.Column<int>(type: "int", nullable: false),
+                    SubmissionText = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SubmissionFilePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SubmittedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    PointsAwarded = table.Column<int>(type: "int", nullable: true),
+                    IsGraded = table.Column<bool>(type: "bit", nullable: false),
+                    FeedBack = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GradedById = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -91,17 +78,23 @@ namespace LevelUpAPI.Migrations
                         principalTable: "Tasks",
                         principalColumn: "TaskId",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TaskAssignments_Users_TraineeId",
+                        column: x => x.TraineeId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Restrict);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_LoginHistories_UserId",
-                table: "LoginHistories",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TaskAssignments_TaskId",
                 table: "TaskAssignments",
                 column: "TaskId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TaskAssignments_TraineeId",
+                table: "TaskAssignments",
+                column: "TraineeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tasks_CreatedById",
@@ -112,9 +105,6 @@ namespace LevelUpAPI.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "LoginHistories");
-
             migrationBuilder.DropTable(
                 name: "TaskAssignments");
 
