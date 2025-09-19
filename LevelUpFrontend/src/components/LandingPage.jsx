@@ -34,13 +34,13 @@ const LandingPage = () => {
         {/* Right: Buttons */}
         <div className="flex items-center gap-3">
           <Link 
-            to="/login"
+            to="/loginpage"
             className="px-6 py-2 text-gray-600 font-medium rounded-lg border border-gray-400 hover:border-gray-950 hover:text-gray-950 transition-all"
           >
             Login
           </Link>
           <Link 
-            to="/signup"
+            to="/signuppage"
             className="px-6 py-2 bg-blue-500 text-white font-medium rounded-lg border border-gray-400 hover:border-gray-950 hover:bg-blue-950 transition-all"
           >
             Sign Up
