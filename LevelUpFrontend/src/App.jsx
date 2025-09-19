@@ -1,5 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./components/LandingPage"; 
+import LoginPage from "./components/LoginPage";
+import SignupPage from "./components/SignupPage";
 
 export default function App() {
   return (
@@ -7,6 +9,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/landingpage" element={<LandingPage />} />
+        <Route path="/loginpage" element={<LoginPage />} />
+        <Route path="/signuppage" element={<SignupPage />} />
       </Routes>
     </Router>
   );
