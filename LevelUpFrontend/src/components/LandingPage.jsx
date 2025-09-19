@@ -67,7 +67,7 @@ const LandingPage = () => {
             {/* Get Started Button */}
             <div>
               <Link 
-                to="/signup"
+                to="/trainertrainee"
                 className="font-medium inline-flex items-center px-8 py-4 bg-white text-gray-700 border border-gray-500 font-
                  rounded-xl shadow-lg hover:text-gray-900 hover:gray-900 hover:shadow-xl transform hover:scale-105 transition-all duration-200"
               > Get Started
