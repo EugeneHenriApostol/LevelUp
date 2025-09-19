@@ -46,8 +46,10 @@ export default function LoginPage() {
             localStorage.setItem("role", data.role);
 
             if (data.role == "Trainee") {
-                window.location.href = "/overviewtrainee"
-            } 
+                window.location.href = "/traineeoverview"
+            } else {
+                window.location.href = "/traineroverview"
+            }
         } catch (err) {
             setError("Something went wrong. Please try again");
             console.error(err);
