@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Users, Star, Zap, Trophy, Award, TrendingUp } from 'lucide-react';
 import LevelUpLogo from '../../assets/LevelUp.png';
 
 const TraineeOverview = () => {
   const [activeTab, setActiveTab] = useState('Overview');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   const stats = [
     {
@@ -60,11 +62,37 @@ const TraineeOverview = () => {
 
   const tabs = ['Overview', 'Tasks', 'Leaderboard'];
 
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/login/logout", {
+        method: "POST",
+        credentials: "include" // important so cookies are sent
+      });
+    } catch (err) {
+      console.error("Logout failed:", err);
+    } finally {
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+      window.location.href = "/";
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 border-2 border-gray-300 rounded-lg">
       {/* Header */}
       <div className="bg-white border-b border-gray-300">
         <div className="flex justify-between items-center p-6">
+          {/* Left: Logo */}
           <div className="flex items-center gap-3">
             <img src={LevelUpLogo} alt="LevelUp Logo" className="w-10 h-10 object-contain" />
             <div>
@@ -72,9 +100,39 @@ const TraineeOverview = () => {
               <p className="text-sm text-gray-600">Learning in sync.</p>
             </div>
           </div>
-            <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
-        <Users className="w-6 h-6 text-white" />
-        </div>
+
+          {/* Right: User Dropdown */}
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center hover:bg-blue-600 transition"
+            >
+              <Users className="w-6 h-6 text-white" />
+            </button>
+
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+                <ul className="py-1">
+                  <li>
+                    <button
+                      className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                      onClick={() => alert("Go to Edit Profile")}
+                    >
+                      Edit Profile
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      className="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
