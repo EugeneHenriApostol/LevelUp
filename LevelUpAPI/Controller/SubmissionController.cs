@@ -46,22 +46,41 @@ namespace LevelUpAPI.Controller
                 return BadRequest(new { message = "At least one file must be uploaded." });
             }
 
+            // allowed file types
+            string[] allowedExtensions = {
+                ".pdf", ".doc", ".docx", ".ppt", ".pptx", ".xls", ".xlsx", ".txt", ".png", ".jpg", ".jpeg"
+            };
+
             // save files to disk
             var uploadFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "submissions");
             Directory.CreateDirectory(uploadFolder);
 
             var savedFilePaths = new List<string>();
+
             foreach (var file in files)
             {
-                var fileName = $"{Guid.NewGuid()}_{Path.GetFileName(file.FileName)}";
-                var filePath = Path.Combine(uploadFolder, fileName);
+                // validate file extension
+                var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+                if (!allowedExtensions.Contains(ext))
+                {
+                    return BadRequest(new { message = $"File type not allowed: {file.FileName}" });
+                }
+
+                // validate file size
+                if (file.Length > 10 * 1024 * 1024)
+                {
+                    return BadRequest(new { message = $"File too large (max 10MB): {file.FileName}" });
+                }
+
+                var safeFileName = $"{Guid.NewGuid()}{ext}";
+                var filePath = Path.Combine(uploadFolder, safeFileName);
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await file.CopyToAsync(stream);
                 }
 
-                savedFilePaths.Add($"/uploads/submissions/{fileName}"); // relative file path
+                savedFilePaths.Add($"/uploads/submissions/{safeFileName}"); // relative file path
             }
 
             // store metadata in db
