@@ -1,59 +1,60 @@
 import React, { useState } from 'react';
 import { Eye, Target, Zap, Users, Sparkles } from 'lucide-react';
 import LevelUpLogo from '../assets/LevelUp.png';
+import { Link } from 'react-router-dom';
 
 export default function LoginPage() {
+    const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
-    const [showPassword, setShowPassword] = useState(false);
-    const [error, setError] = useState(null);
+
+    const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+    const togglePassword = () => {
+        setShowPassword(!showPassword);
     };
 
-    const handleLogin = async () => {
-        setError(null);
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         setLoading(true);
+        setError('');
 
         try {
-            const response = await fetch("http://localhost:5000/api/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                credentials: "include", // recieve the cookie
-                body: JSON.stringify(formData)
+            const response = await fetch('http://localhost:5250/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify(formData),
             });
 
-            if(!response.ok) {
-                const errorData = await response.json();
-                setError(errorData.message || "Login Failed");
-                return;
+            if (!response.ok) {
+                const err = await response.json();
+                throw new Error(err.message || 'Login failed');
             }
 
             const data = await response.json();
-            console.log("Login successful", data);
 
-            localStorage.setItem("token", data.token);
-            localStorage.setItem("role", data.role);
-
-            if (data.role == "Trainee") {
-                window.location.href = "/overviewtrainee"
-            } 
+            // Redirect based on role
+            if (data.role === 'Trainer') {
+                navigate('/overviewtrainer');
+            } else if (data.role === 'Trainee') {
+                navigate('/overviewtrainee');
+            } else {
+                navigate('/landingpage');
+            }
         } catch (err) {
-            setError("Something went wrong. Please try again");
-            console.error(err);
+            setError(err.message);
         } finally {
             setLoading(false);
         }
+
     };
 
     const handleGoogleLogin = () => {
@@ -66,19 +67,16 @@ export default function LoginPage() {
         <header className="flex justify-between items-center py-4 px-8 bg-white/80 backdrop-blur-sm">
             {/* Left: Logo */}
             <div className="flex items-center gap-3">
-            <div className="w-10 h-10 flex items-center justify-center">
-                <img 
-                src={LevelUpLogo} 
-                alt="LevelUp Logo" 
-                className="w-10 h-10"  />
-            </div>
+            <Link to="/landingpage" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <img src={LevelUpLogo} alt="LevelUp Logo" className="w-10 h-10 object-contain" />
+                    </Link>
             <div>
                 <h1 className="text-xl font-bold text-gray-800">LevelUp</h1>
                 <p className="text-sm text-gray-500 -mt-1">Learning in sync.</p>
             </div>
             </div>
             <div className="text-gray-600">
-            Don't have an account? <a href="#" className="text-blue-600 hover:underline">Sign up</a>
+            Don't have an account? <a href="signuppage" className="text-blue-600 hover:underline">Sign up</a>
             </div>
         </header>
 
@@ -100,7 +98,7 @@ export default function LoginPage() {
                             type="email"
                             name="email"
                             value={formData.email}
-                            onChange={handleInputChange}
+                            onChange={handleChange}
                             placeholder="Enter your email address"
                             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors placeholder-gray-400"
                         />
@@ -116,7 +114,7 @@ export default function LoginPage() {
                                 type={showPassword ? "text" : "password"}
                                 name="password"
                                 value={formData.password}
-                                onChange={handleInputChange}
+                                onChange={handleChange}
                                 placeholder="Enter your password"
                                 className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors placeholder-gray-400"
                             />
@@ -131,7 +129,7 @@ export default function LoginPage() {
 
                     {/* Login Button */}
                     <button
-                        onClick={handleLogin}
+                        onClick={handleSubmit}
                         disabled={loading}
                         className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-4 rounded-lg transition-colors mt-6"
                     >
