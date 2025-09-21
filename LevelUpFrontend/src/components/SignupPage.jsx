@@ -59,12 +59,9 @@ export default function SignupPage() {
         <header className="flex justify-between items-center py-4 px-8 bg-white/80 backdrop-blur-sm">
             {/* Left: Logo */}
             <div className="flex items-center gap-3">
-            <div className="w-10 h-10 flex items-center justify-center">
-                <img 
-                src={LevelUpLogo} 
-                alt="LevelUp Logo" 
-                className="w-10 h-10"  />
-            </div>
+            <Link to="/landingpage" style={{ textDecoration: 'none', color: 'inherit' }}>
+                                <img src={LevelUpLogo} alt="LevelUp Logo" className="w-10 h-10 object-contain" />
+                                </Link>
             <div>
                 <h1 className="text-xl font-bold text-gray-800">LevelUp</h1>
                 <p className="text-sm text-gray-500 -mt-1">Learning in sync.</p>
