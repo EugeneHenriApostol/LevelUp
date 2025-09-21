@@ -11,7 +11,8 @@ import TraineeTasks from "./components/TraineePage/TE_Tasks";
 import TrainerTasks from "./components/TrainerPage/TR_Tasks";
 import TR_Overview from "./components/TrainerPage/TR_Overview";
 import TrainerTrainees from "./components/TrainerPage/TR_Trainee";
-import TrainerTest from "./components/TrainerPage/TestModal";
+
+
 
 
 export default function App() {
@@ -29,8 +30,9 @@ export default function App() {
         {/* Trainee Routes */}
         <Route path="/traineroverview" element={<TR_Overview/>}/>
         <Route path="/trainertasks" element={<TrainerTasks/>}/>
-        <Route path="/trainertrainee" element={<TrainerTrainees/>}/>
-        <Route path="/testtrainer" element={<TrainerTest />} />
+        <Route path="/trainertrainees" element={<TrainerTrainees/>}/>
+        
+        
 
       </Routes>
     </Router>

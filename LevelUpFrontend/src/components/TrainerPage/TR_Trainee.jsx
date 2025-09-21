@@ -1,155 +1,177 @@
-import React, { useState } from 'react';
-import { Users, Clock, Flag, Search, Filter, MoreHorizontal, Star, CheckCircle, TrendingUp, TrendingDown } from 'lucide-react';
-import LevelUpLogo from '../../assets/LevelUp.png';
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import {
+  Users,
+  Clock,
+  Flag,
+  Search,
+  Filter,
+  MoreHorizontal,
+  Star,
+  CheckCircle,
+  TrendingUp,
+  TrendingDown,
+} from "lucide-react";
+import LevelUpLogo from "../../assets/LevelUp.png";
 
 const TrainerTrainees = () => {
-  const [activeTab, setActiveTab] = useState('Trainees');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false); // modal state
+  const [newTask, setNewTask] = useState({
+    taskId: "",
+    title: "",
+    description: "",
+    dueDate: "",
+    createdById: "",
+    createdByName: "",
+  });
+
+  const location = useLocation();
 
   const stats = [
-    {
-      title: 'Total Trainee',
-      value: '24',
-      icon: <Users className="w-8 h-8 text-blue-400" />,
-      color: 'text-blue-500'
-    },
-    {
-      title: 'Pending Tasks',
-      value: '10',
-      icon: <Clock className="w-8 h-8 text-red-400" />,
-      color: 'text-red-500'
-    },
-    {
-      title: 'Completed Tasks',
-      value: '35',
-      icon: <Flag className="w-8 h-8 text-purple-400" />,
-      color: 'text-purple-500'
-    }
+    { title: "Total Trainee", value: "24", icon: Users, color: "text-blue-500" },
+    { title: "Pending Tasks", value: "10", icon: Clock, color: "text-red-500" },
+    { title: "Completed Tasks", value: "35", icon: Flag, color: "text-purple-500" },
   ];
 
   const trainees = [
-    {
-      name: 'Emma Davis',
-      email: 'emma.davis@npax.com',
-      lastActive: '2 days ago',
-      points: 485,
-      attendance: '100%',
-      tasks: 28,
-      status: 'active',
-      trend: 'up'
-    },
-    {
-      name: 'Emma Davis',
-      email: 'emma.davis@npax.com',
-      lastActive: '2 days ago',
-      points: 420,
-      attendance: '96%',
-      tasks: 25,
-      status: 'active',
-      trend: 'up'
-    },
-    {
-      name: 'Emma Davis',
-      email: 'emma.davis@npax.com',
-      lastActive: '2 days ago',
-      points: 275,
-      attendance: '88%',
-      tasks: 20,
-      status: 'inactive',
-      trend: 'down'
-    },
-    {
-      name: 'Emma Davis',
-      email: 'emma.davis@npax.com',
-      lastActive: '2 days ago',
-      points: 260,
-      attendance: '90%',
-      tasks: 17,
-      status: 'inactive',
-      trend: 'down'
-    }
+    { name: "Emma Davis", email: "emma.davis@npax.com", lastActive: "2 days ago", points: 485, attendance: "100%", tasks: 28, status: "active", trend: "up" },
+    { name: "John Smith", email: "john.smith@npax.com", lastActive: "3 days ago", points: 420, attendance: "96%", tasks: 25, status: "active", trend: "up" },
+    { name: "Sophia Lee", email: "sophia.lee@npax.com", lastActive: "1 day ago", points: 275, attendance: "88%", tasks: 20, status: "inactive", trend: "down" },
+    { name: "Michael Chen", email: "michael.chen@npax.com", lastActive: "5 days ago", points: 260, attendance: "90%", tasks: 17, status: "inactive", trend: "down" },
   ];
 
-  const tabs = ['Overview', 'Trainees', 'Tasks'];
+  const tabs = [
+    { name: "Overview", path: "/traineroverview" },
+    { name: "Trainees", path: "/trainertrainees" },
+    { name: "Tasks", path: "/trainertasks" },
+  ];
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewTask({ ...newTask, [name]: value });
+  };
+
+  const handleCreateTask = () => {
+    if (!newTask.title || !newTask.description) return;
+    alert(`Task "${newTask.title}" created successfully!`); // placeholder for actual creation logic
+
+    setNewTask({
+      taskId: "",
+      title: "",
+      description: "",
+      dueDate: "",
+      createdById: "",
+      createdByName: "",
+    });
+    setIsModalOpen(false);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-100 via-purple-100 to-pink-100 overflow-hidden">
-    {/* Header */}
-    <header className="flex justify-between items-center py-4 px-8 bg-white/80 backdrop-blur-sm">
-        {/* Left: Logo */}
+      {/* Header */}
+      <header className="flex justify-between items-center py-3 px-6 bg-white shadow relative">
         <div className="flex items-center gap-3">
-        <div className="w-10 h-10 flex items-center justify-center">
-            <img 
-            src={LevelUpLogo} 
-            alt="LevelUp Logo" 
-            className="w-10 h-10"  />
-        </div>
-        <div>
+          <img src={LevelUpLogo} alt="LevelUp Logo" className="w-10 h-10" />
+          <div>
             <h1 className="text-xl font-bold text-gray-800">LevelUp</h1>
-            <p className="text-sm text-gray-500 -mt-1">Learning in sync.</p>
-        </div>
-        </div>
-        <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
-        <Users className="w-6 h-6 text-white" />
-        </div>
-    </header>
-
-      <div className="p-6">
-        {/* Welcome Section */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6">Welcome, @username</h2>
-          
-          {/* Stats Cards */}
-          <div className="grid grid-cols-3 gap-6 mb-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="bg-white rounded-xl p-6 shadow-sm border">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p className="text-gray-600 text-sm mb-2">{stat.title}</p>
-                    <p className={`text-3xl font-bold ${stat.color}`}>{stat.value}</p>
-                  </div>
-                  {stat.icon}
-                </div>
-              </div>
-            ))}
+            <p className="text-sm text-gray-600">Learning in sync.</p>
           </div>
+        </div>
 
-          {/* Quick Actions */}
-          <div className="bg-blue-100 rounded-xl p-6 mb-8">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
-            <div className="grid grid-cols-3 gap-4">
-              <button className="bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg transition-colors text-sm">
-                + Create New Task
+        {/* Avatar Dropdown */}
+        <div className="relative">
+          <button
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+            className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden flex items-center justify-center bg-gray-200"
+          >
+            <img
+              src="https://www.gravatar.com/avatar/?d=mp"
+              alt="User Avatar"
+              className="w-full h-full object-cover"
+            />
+            <span className="absolute bottom-0 right-0 block w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+          </button>
+
+          {dropdownOpen && (
+            <div className="absolute right-0 mt-3 w-40 sm:w-48 bg-white rounded-xl shadow-lg border py-2 z-50">
+              <div className="px-4 py-2 border-b">
+                <p className="text-sm font-medium text-gray-800">Username</p>
+                <p className="text-xs text-gray-500 truncate">user@email.com</p>
+              </div>
+              <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                Profile
               </button>
-              <button className="bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg transition-colors text-sm">
-                + Export Reports
+              <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                Settings
               </button>
-              <button className="bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg transition-colors text-sm">
-                + View All Submissions
+              <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                Logout
               </button>
             </div>
-          </div>
+          )}
+        </div>
+      </header>
 
-          {/* Navigation Tabs */}
-          <div className="w-full bg-white rounded-xl p-1 shadow-sm border mb-8 flex">
-            {tabs.map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`flex-1 text-center rounded-lg font-medium text-sm px-8 py-3 transition-colors ${
-                  activeTab === tab
-                    ? 'bg-gray-100 text-gray-900'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-8 py-12">
+        <h2 className="text-2xl font-medium text-gray-700 mb-8">Welcome, @username</h2>
+
+        {/* Stats */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+          {stats.map((stat, idx) => {
+            const Icon = stat.icon;
+            return (
+              <div
+                key={idx}
+                className="bg-white rounded-xl p-6 shadow border flex justify-between items-center"
               >
-                {tab}
-              </button>
-            ))}
-          </div>
+                <div>
+                  <p className="text-sm text-gray-600">{stat.title}</p>
+                  <p className="text-2xl font-bold text-gray-800">{stat.value}</p>
+                </div>
+                <Icon className={`w-6 h-6 ${stat.color}`} />
+              </div>
+            );
+          })}
         </div>
 
-        {/* Search and Filter Section */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border mb-6">
+        {/* Quick Actions */}
+        <div className="bg-[#cfdcfa] rounded-xl p-4 flex flex-col sm:flex-row gap-3 mb-8">
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex-1 bg-white hover:bg-gray-50 py-2 px-4 rounded-md shadow text-sm font-medium"
+          >
+            + Create New Task
+          </button>
+          <button className="flex-1 bg-white hover:bg-gray-50 py-2 px-4 rounded-md shadow text-sm font-medium">
+            + Export Reports
+          </button>
+          <button className="flex-1 bg-white hover:bg-gray-50 py-2 px-4 rounded-md shadow text-sm font-medium">
+            + View All Submissions
+          </button>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex bg-gray-200 rounded-lg p-1 mb-8">
+          {tabs.map((tab) => (
+            <Link
+              key={tab.name}
+              to={tab.path}
+              className={`flex-1 text-center py-2 rounded-md text-sm font-medium transition-all ${
+                location.pathname === tab.path
+                  ? "bg-white shadow text-gray-900"
+                  : "text-gray-600 hover:text-gray-900"
+              }`}
+            >
+              {tab.name}
+            </Link>
+          ))}
+        </div>
+
+        {/* Search & Filter */}
+        <div className="bg-white rounded-xl p-6 shadow border mb-6">
           <div className="flex gap-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -158,10 +180,10 @@ const TrainerTrainees = () => {
                 placeholder="Search trainees..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors placeholder-gray-400"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors placeholder-gray-400"
               />
             </div>
-            <button className="flex items-center gap-2 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+            <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-sm">
               <Filter className="w-4 h-4" />
               Filter
             </button>
@@ -169,24 +191,25 @@ const TrainerTrainees = () => {
         </div>
 
         {/* Trainees List */}
-        <div className="bg-white rounded-xl shadow-sm border">
+        <div className="bg-white rounded-xl shadow border">
           <div className="p-6 border-b">
-            <h3 className="text-lg font-semibold text-gray-800">All trainees (4)</h3>
+            <h3 className="text-lg font-semibold text-gray-800">
+              All trainees ({trainees.length})
+            </h3>
           </div>
-          
+
           <div className="divide-y">
-            {trainees.map((trainee, index) => (
-              <div key={index} className="p-6 flex items-center justify-between hover:bg-gray-50 transition-colors">
+            {trainees.map((trainee, idx) => (
+              <div
+                key={idx}
+                className="p-6 flex items-center justify-between hover:bg-gray-50 transition-colors"
+              >
                 <div className="flex-1">
-                  <div className="flex items-center gap-4">
-                    <div>
-                      <h4 className="font-medium text-gray-900">{trainee.name}</h4>
-                      <p className="text-sm text-gray-500">{trainee.email}</p>
-                      <p className="text-xs text-gray-400">Last active: {trainee.lastActive}</p>
-                    </div>
-                  </div>
+                  <h4 className="font-medium text-gray-900">{trainee.name}</h4>
+                  <p className="text-sm text-gray-500">{trainee.email}</p>
+                  <p className="text-xs text-gray-400">Last active: {trainee.lastActive}</p>
                 </div>
-                
+
                 <div className="flex items-center gap-8">
                   {/* Points */}
                   <div className="text-center">
@@ -200,7 +223,7 @@ const TrainerTrainees = () => {
                   {/* Attendance */}
                   <div className="text-center">
                     <div className="flex items-center gap-1">
-                      <CheckCircle className="w-4 h-4 text-green-500 fill-current" />
+                      <CheckCircle className="w-4 h-4 text-green-500" />
                       <span className="font-medium text-gray-900">{trainee.attendance}</span>
                     </div>
                     <p className="text-xs text-gray-500">Attendance</p>
@@ -210,7 +233,7 @@ const TrainerTrainees = () => {
                   <div className="text-center">
                     <div className="flex items-center gap-1">
                       <span className="font-medium text-gray-900">{trainee.tasks}</span>
-                      {trainee.trend === 'up' ? (
+                      {trainee.trend === "up" ? (
                         <TrendingUp className="w-4 h-4 text-green-500" />
                       ) : (
                         <TrendingDown className="w-4 h-4 text-red-500" />
@@ -221,14 +244,16 @@ const TrainerTrainees = () => {
 
                   {/* Status */}
                   <div className="flex items-center gap-3">
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      trainee.status === 'active'
-                        ? 'bg-green-100 text-green-600'
-                        : 'bg-red-100 text-red-600'
-                    }`}>
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-medium ${
+                        trainee.status === "active"
+                          ? "bg-green-100 text-green-600"
+                          : "bg-red-100 text-red-600"
+                      }`}
+                    >
                       {trainee.status}
                     </span>
-                    
+
                     <button className="text-gray-400 hover:text-gray-600">
                       <MoreHorizontal className="w-5 h-5" />
                     </button>
@@ -238,9 +263,80 @@ const TrainerTrainees = () => {
             ))}
           </div>
         </div>
-      </div>
+      </main>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/10 z-50">
+          <div className="bg-white p-6 rounded-xl w-96 shadow-lg">
+            <h2 className="text-xl font-semibold mb-4">Create New Task</h2>
+            <div className="space-y-3">
+              <input
+                type="text"
+                name="taskId"
+                placeholder="Task ID"
+                value={newTask.taskId}
+                onChange={handleInputChange}
+                className="w-full border border-gray-300 rounded-md p-2"
+              />
+              <input
+                type="text"
+                name="title"
+                placeholder="Task Title"
+                value={newTask.title}
+                onChange={handleInputChange}
+                className="w-full border border-gray-300 rounded-md p-2"
+              />
+              <textarea
+                name="description"
+                placeholder="Task Description"
+                value={newTask.description}
+                onChange={handleInputChange}
+                className="w-full border border-gray-300 rounded-md p-2"
+              />
+              <input
+                type="date"
+                name="dueDate"
+                value={newTask.dueDate}
+                onChange={handleInputChange}
+                className="w-full border border-gray-300 rounded-md p-2"
+              />
+              <input
+                type="text"
+                name="createdById"
+                placeholder="Created By ID"
+                value={newTask.createdById}
+                onChange={handleInputChange}
+                className="w-full border border-gray-300 rounded-md p-2"
+              />
+              <input
+                type="text"
+                name="createdByName"
+                placeholder="Created By Name"
+                value={newTask.createdByName}
+                onChange={handleInputChange}
+                className="w-full border border-gray-300 rounded-md p-2"
+              />
+            </div>
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="px-4 py-2 bg-gray-200 rounded-md"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleCreateTask}
+                className="px-4 py-2 bg-blue-500 text-white rounded-md"
+              >
+                Create
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
-}
+};
 
 export default TrainerTrainees;
