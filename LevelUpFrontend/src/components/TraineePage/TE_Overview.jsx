@@ -98,6 +98,7 @@ const TraineeOverview = () => {
               <p className="text-2xl font-bold text-gray-800">7</p>
             </div>
             <Zap className="w-6 h-6 text-yellow-500" />
+
           </div>
           <div className="bg-white rounded-2xl p-6 shadow border flex justify-between items-center">
             <div>
@@ -128,6 +129,7 @@ const TraineeOverview = () => {
         {/* Achievements & Recent Activity */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           {/* Achievements */}
+
           <div className="bg-[#d0e84b] rounded-2xl p-6 shadow-md">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Achievements</h3>
             <div className="space-y-4">
@@ -152,6 +154,7 @@ const TraineeOverview = () => {
           </div>
 
           {/* Recent Activity */}
+
           <div className="bg-[#6cc6ea] rounded-2xl p-6 shadow-md">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
             <div className="space-y-4">
@@ -159,6 +162,7 @@ const TraineeOverview = () => {
                 <div key={index} className="bg-white rounded-lg p-4 shadow border">
                   <p className="font-medium text-gray-900">{activity.title}</p>
                   <p className="text-sm text-gray-600">{activity.time}</p>
+
                 </div>
               ))}
             </div>

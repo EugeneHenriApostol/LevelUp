@@ -104,6 +104,7 @@ const TR_Overview = () => {
                 <div className="px-4 py-2 border-b">
                   <p className="text-sm font-medium text-gray-800">Username</p>
                   <p className="text-xs text-gray-500 truncate">user@email.com</p>
+
                 </div>
                 <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                   Profile
@@ -201,8 +202,15 @@ const TR_Overview = () => {
                   </span>
                 </div>
               ))}
+
             </div>
+            <button className="flex items-center gap-2 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+              <Filter className="w-4 h-4" />
+              Filter
+            </button>
           </div>
+        </div>
+
 
           {/* Attendance */}
           <div className="bg-white rounded-xl p-6 shadow">
@@ -223,10 +231,11 @@ const TR_Overview = () => {
                   >
                     {p.status}
                   </span>
+
                 </div>
-              ))}
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </main>
 
@@ -304,4 +313,6 @@ const TR_Overview = () => {
   );
 };
 
+
 export default TR_Overview;
+

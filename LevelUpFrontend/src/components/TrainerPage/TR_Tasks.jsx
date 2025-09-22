@@ -143,15 +143,18 @@ const handleViewSubmissions = (task) => {
 };
 
 
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-100 via-purple-100 to-pink-100 overflow-hidden">
       {/* Header */}
+
       <header className="flex justify-between items-center py-3 px-6 bg-white shadow relative">
         <div className="flex items-center gap-3">
           <img src={LevelUpLogo} alt="LevelUp Logo" className="w-10 h-10" />
           <div>
             <h1 className="text-xl font-bold text-gray-800">LevelUp</h1>
             <p className="text-sm text-gray-600">Learning in sync.</p>
+
           </div>
         </div>
 
@@ -177,6 +180,7 @@ const handleViewSubmissions = (task) => {
               </div>
               <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                 Profile
+
               </button>
               <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                 Settings
@@ -247,33 +251,21 @@ const handleViewSubmissions = (task) => {
               {tab.name}
             </Link>
           ))}
+
         </div>
 
-        {/* Task Management Section */}
-        <div className="mb-6">
-          <h3 className="text-xl font-semibold text-gray-800 mb-2">Task Management</h3>
-          <p className="text-gray-600 text-sm">Create and manage training tasks</p>
-        </div>
-
-        {/* Search and Filter Section */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border mb-6">
-          <div className="flex gap-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                type="text"
-                placeholder="Search tasks..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors placeholder-gray-400"
-              />
+        {/* Content Grid */}
+        <div className="grid grid-cols-2 gap-8">
+          {/* Recent Activity */}
+          <div className="bg-white rounded-xl p-6 shadow-sm border">
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold text-gray-800 mb-1">
+                Recent Activity
+              </h3>
+              <p className="text-gray-600 text-sm">
+                Latest trainee activities and submissions
+              </p>
             </div>
-            <button className="flex items-center gap-2 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-              <Filter className="w-4 h-4" />
-              Filter
-            </button>
-          </div>
-        </div>
 
         {/* Tasks List */}
         <div className="space-y-4">
@@ -320,8 +312,34 @@ const handleViewSubmissions = (task) => {
                         <span>Due: {task.dueDate}</span>
                       </div>
                     </div>
+
                   </div>
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-medium ${activity.statusColor}`}
+                  >
+                    {activity.status}
+                  </span>
                 </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Today's Attendance */}
+          <div className="bg-white rounded-xl p-6 shadow-sm border">
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold text-gray-800 mb-1">
+                Today's Attendance
+              </h3>
+              <p className="text-gray-600 text-sm">Real-Time Check-in Status</p>
+            </div>
+
+            {/* Check-in Rate */}
+            <div className="mb-6">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-sm font-medium text-gray-700">
+                  Check-in Rate
+                </span>
+                <span className="text-2xl font-bold text-gray-800">92%</span>
               </div>
             ))}
         </div>
@@ -380,6 +398,7 @@ const handleViewSubmissions = (task) => {
                 className="w-full border border-gray-300 rounded-md p-2"
               />
             </div>
+
             <div className="mt-6 flex justify-end gap-3">
               <button
                 onClick={() => setIsModalOpen(false)}
@@ -393,6 +412,7 @@ const handleViewSubmissions = (task) => {
               >
                 Create
               </button>
+
             </div>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+
 import {
   Users,
   Clock,
@@ -12,6 +13,7 @@ import {
   TrendingUp,
   TrendingDown,
 } from "lucide-react";
+
 import LevelUpLogo from "../../assets/LevelUp.png";
 
 const TrainerTrainees = () => {
@@ -77,6 +79,7 @@ const TrainerTrainees = () => {
           <div>
             <h1 className="text-xl font-bold text-gray-800">LevelUp</h1>
             <p className="text-sm text-gray-600">Learning in sync.</p>
+
           </div>
         </div>
 
@@ -102,6 +105,7 @@ const TrainerTrainees = () => {
               </div>
               <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                 Profile
+
               </button>
               <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                 Settings
@@ -195,10 +199,12 @@ const TrainerTrainees = () => {
           <div className="p-6 border-b">
             <h3 className="text-lg font-semibold text-gray-800">
               All trainees ({trainees.length})
+
             </h3>
           </div>
 
           <div className="divide-y">
+
             {trainees.map((trainee, idx) => (
               <div
                 key={idx}
@@ -208,6 +214,7 @@ const TrainerTrainees = () => {
                   <h4 className="font-medium text-gray-900">{trainee.name}</h4>
                   <p className="text-sm text-gray-500">{trainee.email}</p>
                   <p className="text-xs text-gray-400">Last active: {trainee.lastActive}</p>
+
                 </div>
 
                 <div className="flex items-center gap-8">
@@ -215,7 +222,9 @@ const TrainerTrainees = () => {
                   <div className="text-center">
                     <div className="flex items-center gap-1">
                       <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                      <span className="font-medium text-gray-900">{trainee.points}</span>
+                      <span className="font-medium text-gray-900">
+                        {trainee.points}
+                      </span>
                     </div>
                     <p className="text-xs text-gray-500">Points</p>
                   </div>
@@ -223,8 +232,10 @@ const TrainerTrainees = () => {
                   {/* Attendance */}
                   <div className="text-center">
                     <div className="flex items-center gap-1">
+
                       <CheckCircle className="w-4 h-4 text-green-500" />
                       <span className="font-medium text-gray-900">{trainee.attendance}</span>
+
                     </div>
                     <p className="text-xs text-gray-500">Attendance</p>
                   </div>
@@ -232,7 +243,9 @@ const TrainerTrainees = () => {
                   {/* Tasks */}
                   <div className="text-center">
                     <div className="flex items-center gap-1">
+
                       <span className="font-medium text-gray-900">{trainee.tasks}</span>
+
                       {trainee.trend === "up" ? (
                         <TrendingUp className="w-4 h-4 text-green-500" />
                       ) : (

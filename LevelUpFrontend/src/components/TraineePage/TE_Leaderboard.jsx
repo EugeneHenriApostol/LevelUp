@@ -52,6 +52,7 @@ const TraineeLeaderboard = () => {
                 <div className="px-4 py-2 border-b">
                   <p className="text-sm font-medium text-gray-800">Username</p>
                   <p className="text-xs text-gray-500 truncate">user@email.com</p>
+
                 </div>
                 <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</button>
                 <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</button>
@@ -120,12 +121,14 @@ const TraineeLeaderboard = () => {
                 <p className="text-sm font-medium text-gray-800 text-center">{user.name}</p>
                 <p className="text-xs text-blue-600 font-semibold">{user.points} points</p>
                 <p className="text-xs text-gray-500">{user.streak} days streak</p>
+
               </div>
             ))}
           </div>
         </div>
 
         {/* Full Leaderboard */}
+
         <div className="bg-[#c1eedb] rounded-2xl p-6 shadow">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Full Leaderboard</h3>
           <div className="space-y-4">
@@ -138,6 +141,7 @@ const TraineeLeaderboard = () => {
                   <div>
                     <p className="text-sm sm:font-medium text-gray-900">{user.name}</p>
                     <p className="text-xs text-gray-500">{user.points} Tasks Completed · 100% Attendance · {user.streak} days streak</p>
+
                   </div>
                 </div>
                 <div className="text-blue-600 font-bold text-sm sm:text-base">{user.points} pts</div>

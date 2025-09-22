@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./components/LandingPage"; 
 import LoginPage from "./components/LoginPage";
 import SignupPage from "./components/SignupPage";
-
 import TraineeLeaderboard from "./components/TraineePage/TE_Leaderboard";
 import TraineeOverview from "./components/TraineePage/TE_Overview";
 import TraineeTasks from "./components/TraineePage/TE_Tasks";
@@ -31,8 +30,6 @@ export default function App() {
         <Route path="/traineroverview" element={<TR_Overview/>}/>
         <Route path="/trainertasks" element={<TrainerTasks/>}/>
         <Route path="/trainertrainees" element={<TrainerTrainees/>}/>
-        
-        
 
       </Routes>
     </Router>
