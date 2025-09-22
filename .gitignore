@@ -50,8 +50,6 @@ dist/
 
 # ---- Env & Secrets ----
 .env
-.env.local
-.env.*.local
 
 # ---- Logs ----
 npm-debug.log*
