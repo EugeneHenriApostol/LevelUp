@@ -1,320 +1,169 @@
-import React from "react";
-import { Users, Star, Zap, Trophy, CheckCircle } from "lucide-react";
-import { NavLink } from "react-router-dom";
-import { useState, useEffect } from "react";
-import LevelUpLogo from "../../assets/LevelUp.png";
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import LevelUpLogo from "../../assets/LevelUp.png"; // Make sure the file exists
+import { Star, Zap, Trophy, CheckCircle } from "lucide-react";
 
 const TraineeTasks = () => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [fullName, setFullName] = useState("User");
-
-  useEffect(() => {
-    const firstName = localStorage.getItem("firstName");
-    const lastName = localStorage.getItem("lastName");
-    if (firstName && lastName) {
-      setFullName(`${JSON.parse(firstName)} ${JSON.parse(lastName)}`);
-    }
-  }, []);
-
-  const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
-  const closeDropdown = () => setIsDropdownOpen(false);
-  const handleLogout = () => {
-    localStorage.clear();
-    window.location.href = "/landingpage";
-  };
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const location = useLocation();
 
   const tabs = [
-    { name: "Overview", to: "/traineeoverview" },
-    { name: "Tasks", to: "/traineetasks" },
-    { name: "Leaderboard", to: "/traineeleaderboard" },
-  ];
-
-  const stats = [
-    {
-      title: "Total Points",
-      value: "300",
-      icon: <Star className="w-8 h-8 text-yellow-500" />,
-      color: "text-gray-900",
-    },
-    {
-      title: "Streak Days",
-      value: "7",
-      icon: <Zap className="w-8 h-8 text-yellow-500" />,
-      color: "text-gray-900",
-    },
-    {
-      title: "Rank",
-      value: "#5",
-      icon: <Trophy className="w-8 h-8 text-yellow-500" />,
-      color: "text-gray-900",
-    },
+    { name: "Overview", path: "/traineeoverview" },
+    { name: "Tasks", path: "/traineetasks" },
+    { name: "Leaderboard", path: "/traineeleaderboard" },
   ];
 
   const tasks = [
-    {
-      id: 1,
-      title: "Implement User Authentication",
-      description: "Setup JWT for user authentication",
-      status: "Completed",
-      statusColor: "bg-green-100 text-green-600",
-      points: "+20 points",
-      pointsColor: "bg-gray-700 text-white",
-      dueDate: "8/3/2025",
-      actionButton: "Completed",
-      actionButtonColor: "bg-green-100 text-green-600",
-      checkmarkColor: "text-green-500",
-    },
-    {
-      id: 2,
-      title: "Create API Documentation",
-      description: "Document all REST API endpoints",
-      status: "Pending",
-      statusColor: "bg-gray-100 text-gray-600",
-      points: "+10 points",
-      pointsColor: "bg-gray-700 text-white",
-      dueDate: "8/3/2025",
-      actionButton: "Start Task",
-      actionButtonColor: "bg-gray-800 text-white",
-      checkmarkColor: "text-green-500",
-    },
-    {
-      id: 3,
-      title: "Create Database Models Schema",
-      description: "Design database models based on project requirements",
-      status: "In-progress",
-      statusColor: "bg-blue-100 text-blue-600",
-      points: "+10 points",
-      pointsColor: "bg-gray-700 text-white",
-      dueDate: "8/3/2025",
-      actionButton: "Mark as Complete",
-      actionButtonColor: "bg-gray-800 text-white",
-      checkmarkColor: "text-green-500",
-    },
+    { id: 1, title: "Implement User Authentication", subtitle: "Setup API for user authentication", status: "complete", points: 40, dueDate: "Sept 18, 2025" },
+    { id: 2, title: "Create API Documentation", subtitle: "Document all REST API endpoints", status: "in-progress", points: 25, dueDate: "Sept 20, 2025" },
+    { id: 3, title: "Create Database Models Schema", subtitle: "Design database models based on project requirements", status: "not-started", points: 30, dueDate: "Sept 21, 2025" },
   ];
+
+  const getStatusBadge = (status) => {
+    switch (status) {
+      case "complete":
+        return <span className="text-green-600 text-sm font-semibold">✔ Completed</span>;
+      case "in-progress":
+        return <span className="text-blue-600 text-sm font-semibold">⏳ In Progress</span>;
+      case "not-started":
+        return <span className="text-gray-600 text-sm font-semibold">▶ Start Task</span>;
+      default:
+        return null;
+    }
+  };
+
+  const completedTasks = tasks.filter(t => t.status === "complete").length;
+  const progress = Math.round((completedTasks / tasks.length) * 100);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-100 via-purple-100 to-pink-100 overflow-hidden">
-      {/* Header */}
-      <header className="flex justify-between items-center py-4 px-8 bg-white/80 backdrop-blur-sm">
-        {/* Left: Logo */}
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 flex items-center justify-center">
-            <img src={LevelUpLogo} alt="LevelUp Logo" className="w-10 h-10" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-gray-800">LevelUp</h1>
-            <p className="text-sm text-gray-500 -mt-1">Learning in sync.</p>
-          </div>
-        </div>
-        <div className="relative flex justify-end items-center">
-            {/* Profile icon */}
-            <div
-              onClick={toggleDropdown}
-              className="cursor-pointer rounded-full bg-blue-500 p-2 flex items-center justify-center hover:bg-blue-600 transition"
-            >
-              {/* Avatar icon (SVG) */}
-              <svg
-                className="w-6 h-6 text-white"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z" />
-                <path d="M12 14c-4.418 0-8 3.582-8 8h16c0-4.418-3.582-8-8-8z" />
-              </svg>
-            </div>
-
-            {/* Dropdown menu */}
-            {isDropdownOpen && (
-              <>
-                {/* Click-away overlay */}
-                <div className="fixed inset-0 z-10" onClick={closeDropdown} />
-                <div className="absolute top-12 right-0 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
-                  {/* User name */}
-                  <button
-                    onClick={closeDropdown}
-                    className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    <svg
-                      className="w-5 h-5 mr-2 text-gray-600"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z" />
-                      <path d="M12 14c-4.418 0-8 3.582-8 8h16c0-4.418-3.582-8-8-8z" />
-                    </svg>
-                    <span>{fullName}</span>
-                  </button>
-
-                  {/* Edit Profile */}
-                  <button
-                    onClick={closeDropdown}
-                    className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    <svg
-                      className="w-5 h-5 mr-2 text-gray-600"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M11 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5" />
-                      <path d="M18.5 2.5a2 2 0 0 1 2.83 2.83L12 14l-4 1 1-4 9.5-8.5z" />
-                    </svg>
-                    <span>Edit Profile</span>
-                  </button>
-
-                  <div className="border-t my-1" />
-
-                  {/* Logout */}
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
-                  >
-                    <svg
-                      className="w-5 h-5 mr-2 text-red-600"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                      <path d="M16 17l5-5-5-5" />
-                      <path d="M21 12H9" />
-                    </svg>
-                    Logout
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-      </header>
-
-      <div className="p-6">
-        {/* Welcome Section */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-            Welcome, @username
-          </h2>
-
-          {/* Stats Cards */}
-          <div className="grid grid-cols-3 gap-6 mb-8">
-            {stats.map((stat, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-xl p-6 shadow-sm border"
-              >
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p className="text-gray-600 text-sm mb-2">{stat.title}</p>
-                    <p className={`text-3xl font-bold ${stat.color}`}>
-                      {stat.value}
-                    </p>
-                  </div>
-                  {stat.icon}
-                </div>
+          {/* Header */}
+          <header className="flex justify-between items-center py-3 px-6 bg-white/80 backdrop-blur-sm shadow">
+            <div className="flex items-center gap-3">
+              <img src={LevelUpLogo} alt="LevelUp Logo" className="w-7 h-7 sm:w-10 sm:h-10" />
+              <div>
+                <h1 className="text-lg sm:text-xl font-bold text-gray-800">LevelUp</h1>
+                <p className="text-xs sm:text-sm text-gray-600">Learning in sync.</p>
               </div>
-            ))}
-          </div>
-
-          {/* Navigation Tabs */}
-          <div className="w-full bg-white rounded-xl p-1 shadow-sm border mb-8 flex">
-            {tabs.map((tab) => (
-              <NavLink
-                key={tab.name}
-                to={tab.to}
-                className={({ isActive }) =>
-                  `flex-1 text-center rounded-lg font-medium text-sm px-8 py-3 transition-colors ${
-                    isActive
-                      ? "bg-gray-100 text-gray-900"
-                      : "text-gray-600 hover:text-gray-900"
-                  }`
-                }
-              >
-                {tab.name}
-              </NavLink>
-            ))}
-          </div>
-        </div>
-
-        {/* Task Progress Section */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border mb-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            Task Progress
-          </h3>
-
-          <div className="mb-4">
-            <h4 className="text-sm font-medium text-gray-700 mb-2">
-              Completed Tasks
-            </h4>
-            <div className="w-full bg-gray-300 rounded-full h-3">
-              <div
-                className="bg-gray-800 h-3 rounded-full"
-                style={{ width: "25%" }}
-              ></div>
             </div>
-            <p className="text-xs text-gray-600 mt-2">
-              25% of task completed this week
-            </p>
+    
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <button
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden flex items-center justify-center bg-gray-200"
+                >
+                  <img
+                    src="https://www.gravatar.com/avatar/?d=mp"
+                    alt="User Avatar"
+                    className="w-full h-full object-cover"
+                  />
+                  <span className="absolute bottom-0 right-0 block w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+                </button>
+    
+                {dropdownOpen && (
+                  <div className="absolute right-0 mt-3 w-40 sm:w-48 bg-white rounded-xl shadow-lg border py-2 z-50">
+                    <div className="px-4 py-2 border-b">
+                      <p className="text-sm font-medium text-gray-800">Username</p>
+                      <p className="text-xs text-gray-500 truncate">user@email.com</p>
+                    </div>
+                    <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      Profile
+                    </button>
+                    <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      Settings
+                    </button>
+                    <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      Logout
+                    </button>
+
+                  </div>
+                )}
+              </div>
+            </div>
+          </header>
+    
+          {/* Main Content */}
+          <main className="max-w-7xl mx-auto px-8 py-16">
+            <h2 className="text-xl sm:text-2xl font-medium text-gray-700 mb-8">
+              Welcome, @username
+            </h2>
+    
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
+              <div className="bg-white rounded-2xl p-6 shadow border flex justify-between items-center">
+                <div>
+                  <p className="text-sm text-gray-600">Total Points</p>
+                  <p className="text-2xl font-bold text-gray-800">300</p>
+                </div>
+                <Star className="w-6 h-6 text-yellow-500" />
+              </div>
+              <div className="bg-white rounded-2xl p-6 shadow border flex justify-between items-center">
+                <div>
+                  <p className="text-sm text-gray-600">Streak Days</p>
+                  <p className="text-2xl font-bold text-gray-800">7</p>
+                </div>
+                <Zap className="w-6 h-6 text-yellow-500" />
+              </div>
+              <div className="bg-white rounded-2xl p-6 shadow border flex justify-between items-center">
+                <div>
+                  <p className="text-sm text-gray-600">Rank</p>
+                  <p className="text-2xl font-bold text-gray-800">#5</p>
+                </div>
+                <Trophy className="w-6 h-6 text-yellow-500" />
+              </div>
+            </div>
+    
+            {/* Tabs */}
+            <div className="flex flex-col sm:flex-row bg-[#a6adb9] rounded-xl p-2 gap-2 sm:gap-0 mb-8">
+              {tabs.map((tab) => (
+                <Link
+                  key={tab.name}
+                  to={tab.path}
+                  className={`flex-1 text-center py-2 px-3 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    location.pathname === tab.path
+                      ? "bg-white shadow text-gray-900"
+                      : "text-gray-600 hover:text-gray-900"
+                  }`}
+                >
+                  {tab.name}
+                </Link>
+              ))}
+            </div>
+
+        {/* Task Progress */}
+        <div className="bg-[#c1ceed] rounded-2xl p-6 sm:p-8 shadow-lg mb-8">
+          <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3">Task Progress</h3>
+          <p className="text-sm sm:text-base text-gray-700 mb-4">Completed Tasks</p>
+          <div className="w-full bg-gray-200 rounded-full h-5 sm:h-6 overflow-hidden">
+            <div className="bg-[#3b3b3b] h-5 sm:h-6 rounded-full transition-all duration-500 ease-out" style={{ width: `${progress}%` }}></div>
           </div>
+          <p className="text-sm sm:text-base text-gray-800 mt-3 font-semibold">{progress}% of tasks completed this week</p>
         </div>
 
-        {/* Tasks List */}
-        <div className="space-y-4">
-          {tasks.map((task) => (
-            <div
-              key={task.id}
-              className="bg-white rounded-xl shadow-sm border p-6"
-            >
-              <div className="flex items-start gap-4">
-                {/* Checkmark Icon */}
-                <div className="mt-1">
-                  <CheckCircle className={`w-5 h-5 ${task.checkmarkColor}`} />
-                </div>
-
-                {/* Task Content */}
-                <div className="flex-1">
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className="text-lg font-semibold text-gray-900">
-                      {task.title}
-                    </h4>
-                    <button
-                      className={`px-4 py-2 rounded-lg text-sm font-medium ${task.actionButtonColor}`}
-                    >
-                      {task.actionButton}
-                    </button>
-                  </div>
-
-                  <p className="text-gray-600 text-sm mb-4">
-                    {task.description}
-                  </p>
-
-                  <div className="flex items-center gap-4">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${task.statusColor}`}
-                    >
-                      {task.status}
-                    </span>
-
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${task.pointsColor}`}
-                    >
-                      {task.points}
-                    </span>
-                  </div>
-
-                  <div className="mt-3 text-sm text-gray-500">
-                    <span>Due Date: {task.dueDate}</span>
+        {/* Task Cards */}
+        <div className="space-y-4 sm:space-y-6">
+          {tasks.map(task => (
+            <div key={task.id} className="bg-white border border-gray-200 rounded-xl p-4 sm:p-5 shadow hover:border-gray-300 transition">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div className="flex items-start space-x-3">
+                  <CheckCircle className={`w-5 h-5 sm:w-6 sm:h-6 ${task.status === "complete" ? "text-green-500" : "text-gray-300"}`} />
+                  <div>
+                    <h4 className="text-sm sm:text-base font-semibold text-gray-900">{task.title}</h4>
+                    <p className="text-xs sm:text-sm text-gray-600 mb-2">{task.subtitle}</p>
+                    <div className="flex flex-wrap items-center gap-2">
+                      {getStatusBadge(task.status)}
+                      <span className="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded-full font-medium">{task.points} points</span>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1 sm:mt-2">Due Date: {task.dueDate}</p>
                   </div>
                 </div>
+                <div className="hidden sm:block">{getStatusBadge(task.status)}</div>
               </div>
             </div>
           ))}
         </div>
-      </div>
+      </main>
     </div>
   );
 };
