@@ -10,7 +10,7 @@ services:
       - db
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=db;Database=LevelUpDB;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=true;
+      - ConnectionStrings__DefaultConnection=Server=db,1433;Database=LevelUpDB;User Id=sa;Password=YourStrongPassw0rd!;TrustServerCertificate=true;
   
   frontend:
     build:
@@ -29,7 +29,7 @@ services:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: levelup-sqlserver
     environment:
-      SA_PASSWORD: "YourStrong!Passw0rd"
+      SA_PASSWORD: "YourStrongPassw0rd!"
       ACCEPT_EULA: "Y"
       MSSQL_PID: "Developer"
     ports:
