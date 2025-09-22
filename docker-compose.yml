@@ -1,0 +1,41 @@
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: LevelUpAPI/Dockerfile
+    ports:
+      - "5000:8080"
+    depends_on:
+      - db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=db;Database=LevelUpDB;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=true;
+  
+  frontend:
+    build:
+      context: ./LevelUpFrontEnd
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: /api   # use Nginx proxy
+    ports:
+      - "8081:80"
+    depends_on:
+      - api
+    environment:
+      - API_URL=http://api:8080
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: levelup-sqlserver
+    environment:
+      SA_PASSWORD: "YourStrong!Passw0rd"
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+
+volumes:
+  sql_data:
