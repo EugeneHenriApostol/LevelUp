@@ -5,8 +5,8 @@ import SignupPage from "./components/SignupPage";
 import TraineeLeaderboard from "./components/TraineePage/TE_Leaderboard";
 import TraineeOverview from "./components/TraineePage/TE_Overview";
 import TraineeTasks from "./components/TraineePage/TE_Tasks";
-import TrainerOverview from "./components/TrainerPage/TR_Tasks";
-import TrainerTasks from "./components/TrainerPage/TR_Overview";
+import TrainerOverview from "./components/TrainerPage/TR_Overview";
+import TrainerTasks from "./components/TrainerPage/TR_Tasks";
 import TrainerTrainees from "./components/TrainerPage/TR_Trainee";
 import EditProfile from "./components/EditProfile";
 
