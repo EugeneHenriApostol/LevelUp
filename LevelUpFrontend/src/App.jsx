@@ -8,6 +8,7 @@ import TraineeTasks from "./components/TraineePage/TE_Tasks";
 import TrainerOverview from "./components/TrainerPage/TR_Tasks";
 import TrainerTasks from "./components/TrainerPage/TR_Overview";
 import TrainerTrainees from "./components/TrainerPage/TR_Trainee";
+import EditProfile from "./components/EditProfile";
 
 
 export default function App() {
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/landingpage" element={<LandingPage />} />
         <Route path="/loginpage" element={<LoginPage />} />
         <Route path="/signuppage" element={<SignupPage />} />
+        <Route path="/editprofile" element={<EditProfile/>} />
         {/* Trainee Routes */}
         <Route path="/traineeleaderboard" element={<TraineeLeaderboard/>} />
         <Route path="/traineeoverview" element={<TraineeOverview/>} />

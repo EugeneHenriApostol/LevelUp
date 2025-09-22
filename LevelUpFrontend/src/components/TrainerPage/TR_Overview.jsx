@@ -12,12 +12,42 @@ import {
   Edit,
   LogOut,
 } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import LevelUpLogo from "../../assets/LevelUp.png";
 
 const TrainerOverview = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [fullName, setFullName] = useState("User");
+  const navigate = useNavigate();
+
+  //   const handleUpdate = async () => {
+  //     try {
+  //         // Call your API to update the profile
+  //         // Example: await api.updateProfile(formData);
+  //         // Simulate API call:
+  //         // await fetch('/api/update-profile', { method: 'POST', body: JSON.stringify(formData) });
+
+  //         // Save updated info to localStorage
+  //         localStorage.setItem("firstName", JSON.stringify(formData.firstName));
+  //         localStorage.setItem("lastName", JSON.stringify(formData.lastName));
+  //         localStorage.setItem("role", JSON.stringify(formData.role));
+  //         localStorage.setItem("workEmail", JSON.stringify(formData.workEmail));
+
+  //         // Optionally, show a success message
+
+  //         // Go back to previous page (dashboard)
+  //         navigate(-1);
+  //     } catch (error) {
+  //         // Handle error (show error message)
+  //         console.error("Failed to update profile", error);
+  //     }
+  // };
+
+  const goToEditProfile = () => {
+    closeDropdown();          // close the dropdown first
+    navigate("/editprofile"); // 👈 route to EditProfile.jsx
+  };
+
 
   useEffect(() => {
     const firstName = localStorage.getItem("firstName");
@@ -144,7 +174,7 @@ const TrainerOverview = () => {
 
                 {/* Edit Profile */}
                 <button
-                  onClick={closeDropdown}
+                  onClick={goToEditProfile}
                   className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 >
                   <svg
@@ -242,10 +272,9 @@ const TrainerOverview = () => {
                 key={tab.name}
                 to={tab.to}
                 className={({ isActive }) =>
-                  `flex-1 text-center rounded-lg font-medium text-sm px-8 py-3 transition-colors ${
-                    isActive
-                      ? "bg-gray-100 text-gray-900"
-                      : "text-gray-600 hover:text-gray-900"
+                  `flex-1 text-center rounded-lg font-medium text-sm px-8 py-3 transition-colors ${isActive
+                    ? "bg-gray-100 text-gray-900"
+                    : "text-gray-600 hover:text-gray-900"
                   }`
                 }
               >

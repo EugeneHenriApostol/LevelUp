@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import LevelUpLogo from '../assets/LevelUp.png'; // Ensure you have a logo image in the specified path
-
+import { Users, TrendingUp, Clock } from "lucide-react";
+import LevelUpLogo from '../assets/LevelUp.png';
 
 const LandingPage = () => {
   return (
@@ -133,9 +133,9 @@ const LandingPage = () => {
                   <div className="space-y-4">
                     <h4 className="font-semibold text-gray-800 text-sm">Course Progress</h4>
                     {[
-                      { color: 'blue', abbr: 'TC', title: 'JavaScript Fundamentals', progress: '75', bar: 'w-[75%]' },
-                      { color: 'yellow', abbr: 'TA', title: 'Project Management', progress: '45', bar: 'w-[45%]' },
-                      { color: 'green', abbr: 'TS', title: 'UX Design Basics', progress: '92', bar: 'w-[92%]' },
+                      { color: 'blue', abbr: 'JS', title: 'JavaScript Fundamentals', progress: '75', bar: 'w-[75%]' },
+                      { color: 'yellow', abbr: 'PM', title: 'Project Management', progress: '45', bar: 'w-[45%]' },
+                      { color: 'green', abbr: 'UX', title: 'UX Design Basics', progress: '92', bar: 'w-[92%]' },
                     ].map((c, i) => (
                       <div key={i} className="flex items-center gap-3">
                         <div className={`w-8 h-8 bg-${c.color}-500 rounded-full flex items-center justify-center text-white text-xs font-bold`}>{c.abbr}</div>
@@ -177,8 +177,69 @@ const LandingPage = () => {
           </div>
         </div>
       </main>
+      {/* Features Section */}
+      <div className="container mx-auto px-6 py-9">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">Why teams choose LevelUp</h2>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Everything you need to create, manage, and track effective training programs for your team.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          <div className="text-center p-8 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
+            <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <Users className="w-8 h-8 text-blue-600" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">Team Collaboration</h3>
+            <p className="text-gray-600">
+              Bring your entire team together with shared learning paths, progress tracking, and collaborative features.
+            </p>
+          </div>
+
+          <div className="text-center p-8 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
+            <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <TrendingUp className="w-8 h-8 text-green-600" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">Analytics & Insights</h3>
+            <p className="text-gray-600">
+              Track progress, identify learning gaps, and measure success with comprehensive analytics and reporting.
+            </p>
+          </div>
+
+          <div className="text-center p-8 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
+            <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <Clock className="w-8 h-8 text-purple-600" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">Flexible Learning</h3>
+            <p className="text-gray-600">
+              Adaptive learning paths that fit your team's schedule and learning preferences with 24/7 accessibility.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-6">
+        <div className="container mx-auto px-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center">
+                <div className="w-6 h-6 bg-white rounded transform rotate-45"></div>
+              </div>
+              <div>
+                <h3 className="text-xl font-bold">LevelUp</h3>
+                <p className="text-sm text-gray-400">Learning in sync.</p>
+              </div>
+            </div>
+            <div className="text-gray-400">
+              <p>&copy; 2025 LevelUp. All rights reserved.</p>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
-    
+
   );
 };
 
