@@ -74,10 +74,13 @@ const TraineeOverview = () => {
 
   const handleLogout = async () => {
     try {
-      await fetch("/api/login/logout", {
-        method: "POST",
-        credentials: "include" // important so cookies are sent
-      });
+      const response = await fetch("http://localhost:5250/api/login/logout", {
+            method: "POST",
+            credentials: "include", // send the cookie so server can delete it
+        });
+        if (!response.ok) {
+            console.error("Failed to log out:", response.statusText);
+        }
     } catch (err) {
       console.error("Logout failed:", err);
     } finally {
