@@ -1,12 +1,40 @@
-import React from "react";
 import { Users, Star, Zap, Trophy, CheckCircle } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import LevelUpLogo from "../../assets/LevelUp.png";
 
 const TraineeTasks = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [fullName, setFullName] = useState("User");
+  const navigate = useNavigate();
+
+  //   const handleUpdate = async () => {
+  //     try {
+  //         // Call your API to update the profile
+  //         // Example: await api.updateProfile(formData);
+  //         // Simulate API call:
+  //         // await fetch('/api/update-profile', { method: 'POST', body: JSON.stringify(formData) });
+
+  //         // Save updated info to localStorage
+  //         localStorage.setItem("firstName", JSON.stringify(formData.firstName));
+  //         localStorage.setItem("lastName", JSON.stringify(formData.lastName));
+  //         localStorage.setItem("role", JSON.stringify(formData.role));
+  //         localStorage.setItem("workEmail", JSON.stringify(formData.workEmail));
+
+  //         // Optionally, show a success message
+
+  //         // Go back to previous page (dashboard)
+  //         navigate(-1);
+  //     } catch (error) {
+  //         // Handle error (show error message)
+  //         console.error("Failed to update profile", error);
+  //     }
+  // };
+
+  const goToEditProfile = () => {
+    closeDropdown();          // close the dropdown first
+    navigate("/editprofile"); // 👈 route to EditProfile.jsx
+  };
 
   useEffect(() => {
     const firstName = localStorage.getItem("firstName");
@@ -107,97 +135,97 @@ const TraineeTasks = () => {
           </div>
         </div>
         <div className="relative flex justify-end items-center">
-            {/* Profile icon */}
-            <div
-              onClick={toggleDropdown}
-              className="cursor-pointer rounded-full bg-blue-500 p-2 flex items-center justify-center hover:bg-blue-600 transition"
+          {/* Profile icon */}
+          <div
+            onClick={toggleDropdown}
+            className="cursor-pointer rounded-full bg-blue-500 p-2 flex items-center justify-center hover:bg-blue-600 transition"
+          >
+            {/* Avatar icon (SVG) */}
+            <svg
+              className="w-6 h-6 text-white"
+              viewBox="0 0 24 24"
+              fill="currentColor"
             >
-              {/* Avatar icon (SVG) */}
-              <svg
-                className="w-6 h-6 text-white"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z" />
-                <path d="M12 14c-4.418 0-8 3.582-8 8h16c0-4.418-3.582-8-8-8z" />
-              </svg>
-            </div>
-
-            {/* Dropdown menu */}
-            {isDropdownOpen && (
-              <>
-                {/* Click-away overlay */}
-                <div className="fixed inset-0 z-10" onClick={closeDropdown} />
-                <div className="absolute top-12 right-0 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
-                  {/* User name */}
-                  <button
-                    onClick={closeDropdown}
-                    className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    <svg
-                      className="w-5 h-5 mr-2 text-gray-600"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z" />
-                      <path d="M12 14c-4.418 0-8 3.582-8 8h16c0-4.418-3.582-8-8-8z" />
-                    </svg>
-                    <span>{fullName}</span>
-                  </button>
-
-                  {/* Edit Profile */}
-                  <button
-                    onClick={closeDropdown}
-                    className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    <svg
-                      className="w-5 h-5 mr-2 text-gray-600"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M11 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5" />
-                      <path d="M18.5 2.5a2 2 0 0 1 2.83 2.83L12 14l-4 1 1-4 9.5-8.5z" />
-                    </svg>
-                    <span>Edit Profile</span>
-                  </button>
-
-                  <div className="border-t my-1" />
-
-                  {/* Logout */}
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
-                  >
-                    <svg
-                      className="w-5 h-5 mr-2 text-red-600"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                      <path d="M16 17l5-5-5-5" />
-                      <path d="M21 12H9" />
-                    </svg>
-                    Logout
-                  </button>
-                </div>
-              </>
-            )}
+              <path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z" />
+              <path d="M12 14c-4.418 0-8 3.582-8 8h16c0-4.418-3.582-8-8-8z" />
+            </svg>
           </div>
+
+          {/* Dropdown menu */}
+          {isDropdownOpen && (
+            <>
+              {/* Click-away overlay */}
+              <div className="fixed inset-0 z-10" onClick={closeDropdown} />
+              <div className="absolute top-12 right-0 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
+                {/* User name */}
+                <button
+                  onClick={closeDropdown}
+                  className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  <svg
+                    className="w-5 h-5 mr-2 text-gray-600"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z" />
+                    <path d="M12 14c-4.418 0-8 3.582-8 8h16c0-4.418-3.582-8-8-8z" />
+                  </svg>
+                  <span>{fullName}</span>
+                </button>
+
+                {/* Edit Profile */}
+                <button
+                  onClick={goToEditProfile}
+                  className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  <svg
+                    className="w-5 h-5 mr-2 text-gray-600"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M11 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5" />
+                    <path d="M18.5 2.5a2 2 0 0 1 2.83 2.83L12 14l-4 1 1-4 9.5-8.5z" />
+                  </svg>
+                  <span>Edit Profile</span>
+                </button>
+
+                <div className="border-t my-1" />
+
+                {/* Logout */}
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                >
+                  <svg
+                    className="w-5 h-5 mr-2 text-red-600"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                    <path d="M16 17l5-5-5-5" />
+                    <path d="M21 12H9" />
+                  </svg>
+                  Logout
+                </button>
+              </div>
+            </>
+          )}
+        </div>
       </header>
 
       <div className="p-6">
         {/* Welcome Section */}
         <div className="mb-8">
           <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-            Welcome, @username
+            Welcome, {fullName}
           </h2>
 
           {/* Stats Cards */}
@@ -227,10 +255,9 @@ const TraineeTasks = () => {
                 key={tab.name}
                 to={tab.to}
                 className={({ isActive }) =>
-                  `flex-1 text-center rounded-lg font-medium text-sm px-8 py-3 transition-colors ${
-                    isActive
-                      ? "bg-gray-100 text-gray-900"
-                      : "text-gray-600 hover:text-gray-900"
+                  `flex-1 text-center rounded-lg font-medium text-sm px-8 py-3 transition-colors ${isActive
+                    ? "bg-gray-100 text-gray-900"
+                    : "text-gray-600 hover:text-gray-900"
                   }`
                 }
               >
