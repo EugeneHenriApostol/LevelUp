@@ -238,7 +238,7 @@ const TrainerTrainees = () => {
         {/* Welcome Section */}
         <div className="mb-8">
           <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-            Welcome, @username
+            Welcome, User
           </h2>
 
           {/* Stats Cards */}
