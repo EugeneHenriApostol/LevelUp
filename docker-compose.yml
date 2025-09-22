@@ -17,13 +17,13 @@ services:
       context: ./LevelUpFrontEnd
       dockerfile: Dockerfile
       args:
-        VITE_API_URL: http://localhost:5000
+        VITE_API_URL: /api   # use Nginx proxy
     ports:
-      - "3000:80"
+      - "8081:80"
     depends_on:
       - api
     environment:
-      - API_URL= http://api:8080
+      - API_URL=http://api:8080
 
   db:
     image: mcr.microsoft.com/mssql/server:2022-latest
