@@ -27,11 +27,13 @@ export default function LoginPage() {
         setError('');
 
         try {
-            const response = await fetch('http://localhost:5250/api/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-                body: JSON.stringify(formData),
+            const response = await fetch("http://localhost:5250/api/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: "include", // recieve the cookie
+                body: JSON.stringify(formData)
             });
 
             if (!response.ok) {

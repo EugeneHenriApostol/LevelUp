@@ -17,9 +17,19 @@ const TraineeOverview = () => {
 
   const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
   const closeDropdown = () => setIsDropdownOpen(false);
-  const handleLogout = () => {
-    localStorage.clear();
-    window.location.href = "/landingpage";
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/login/logout", {
+        method: "POST",
+        credentials: "include" // important so cookies are sent
+      });
+    } catch (err) {
+      console.error("Logout failed:", err);
+    } finally {
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+      window.location.href = "/";
+    }
   };
 
   const tabs = [
