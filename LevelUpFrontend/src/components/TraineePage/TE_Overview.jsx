@@ -224,19 +224,20 @@ const TraineeOverview = () => {
         </div>
       </div>
 
-      <div className="p-6">
+      <div className="max-w-6xl mx-auto">
+        <div className="p-4">
         {/* Welcome Section */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+        <div className="mb-6">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
             Welcome, {fullName}
           </h2>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-3 gap-4 mb-6">
             {stats.map((stat, index) => (
               <div
                 key={index}
-                className="bg-white rounded-xl p-6 shadow-sm border"
+                className="bg-white rounded-xl p-4 shadow-sm border"
               >
                 <div className="flex justify-between items-center">
                   <div>
@@ -252,13 +253,13 @@ const TraineeOverview = () => {
           </div>
 
           {/* Navigation Tabs */}
-          <div className="w-full bg-white rounded-xl p-1 shadow-sm border mb-8 flex">
+          <div className="w-full bg-white rounded-xl p-0.5 shadow-sm border mb-6 flex">
             {tabs.map((tab) => (
               <NavLink
                 key={tab.name}
                 to={tab.to}
                 className={({ isActive }) =>
-                  `flex-1 text-center rounded-lg font-medium text-sm px-8 py-3 transition-colors ${isActive
+                  `flex-1 text-center rounded-lg font-medium text-sm px-6 py-2 transition-colors ${isActive
                     ? "bg-gray-100 text-gray-900"
                     : "text-gray-600 hover:text-gray-900"
                   }`
@@ -271,21 +272,21 @@ const TraineeOverview = () => {
         </div>
 
         {/* Content Grid */}
-        <div className="grid grid-cols-2 gap-8 mb-8">
+        <div className="grid grid-cols-2 gap-6 mb-6">
           {/* Achievements */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border">
-            <div className="flex items-center gap-2 mb-6">
+          <div className="bg-white rounded-xl p-4 shadow-sm border">
+            <div className="flex items-center gap-2 mb-4">
               <Award className="w-5 h-5 text-gray-700" />
               <h3 className="text-lg font-semibold text-gray-800">
                 Achievements
               </h3>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
               {achievements.map((achievement, index) => (
                 <div
                   key={index}
-                  className={`p-4 rounded-lg border-2 ${achievement.bgColor}`}
+                  className={`p-3 rounded-lg border-2 ${achievement.bgColor}`}
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">{achievement.icon}</span>
@@ -307,19 +308,19 @@ const TraineeOverview = () => {
           </div>
 
           {/* Recent Activity */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border">
-            <div className="flex items-center gap-2 mb-6">
+          <div className="bg-white rounded-xl p-4 shadow-sm border">
+            <div className="flex items-center gap-2 mb-4">
               <TrendingUp className="w-5 h-5 text-gray-700" />
               <h3 className="text-lg font-semibold text-gray-800">
                 Recent Activity
               </h3>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
               {recentActivities.map((activity, index) => (
                 <div
                   key={index}
-                  className="py-3 border-b border-gray-100 last:border-b-0"
+                  className="py-2 border-b border-gray-100 last:border-b-0"
                 >
                   <p className="font-medium text-gray-800 mb-1">
                     {activity.task}
@@ -332,7 +333,7 @@ const TraineeOverview = () => {
         </div>
 
         {/* Weekly Progress */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border">
+        <div className="bg-white rounded-xl p-4 shadow-sm border">
           <h3 className="text-lg font-semibold text-gray-800 mb-2">
             Weekly Progress
           </h3>
@@ -386,6 +387,7 @@ const TraineeOverview = () => {
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </div>

@@ -271,19 +271,20 @@ const TraineeLeaderboard = () => {
         </div>
       </header>
 
-      <div className="p-6">
+      <div className="max-w-6xl mx-auto">
+        <div className="p-4">
         {/* Welcome Section */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+        <div className="mb-6">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
             Welcome, {fullName}
           </h2>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-3 gap-4 mb-6">
             {stats.map((stat, index) => (
               <div
                 key={index}
-                className="bg-white rounded-xl p-6 shadow-sm border"
+                className="bg-white rounded-xl p-4 shadow-sm border"
               >
                 <div className="flex justify-between items-center">
                   <div>
@@ -299,13 +300,13 @@ const TraineeLeaderboard = () => {
           </div>
 
           {/* Navigation Tabs */}
-          <div className="w-full bg-white rounded-xl p-1 shadow-sm border mb-8 flex">
+          <div className="w-full bg-white rounded-xl p-0.5 shadow-sm border mb-6 flex">
             {tabs.map((tab) => (
               <NavLink
                 key={tab.name}
                 to={tab.to}
                 className={({ isActive }) =>
-                  `flex-1 text-center rounded-lg font-medium text-sm px-8 py-3 transition-colors ${isActive
+                  `flex-1 text-center rounded-lg font-medium text-sm px-6 py-2 transition-colors ${isActive
                     ? "bg-gray-100 text-gray-900"
                     : "text-gray-600 hover:text-gray-900"
                   }`
@@ -318,15 +319,15 @@ const TraineeLeaderboard = () => {
         </div>
 
         {/* Top Performers Section */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border mb-6">
-          <div className="flex items-center gap-2 mb-6">
+        <div className="bg-white rounded-xl p-4 shadow-sm border mb-4">
+          <div className="flex items-center gap-2 mb-4">
             <Trophy className="w-5 h-5 text-gray-700" />
             <h3 className="text-lg font-semibold text-gray-800">
               Top Performers
             </h3>
           </div>
 
-          <div className="grid grid-cols-5 gap-6">
+          <div className="grid grid-cols-5 gap-4">
             {topPerformers.map((performer, index) => (
               <div key={index} className="text-center">
                 <div
@@ -355,7 +356,7 @@ const TraineeLeaderboard = () => {
 
         {/* Full Leaderboard */}
         <div className="bg-white rounded-xl shadow-sm border">
-          <div className="p-6 border-b">
+          <div className="p-4 border-b">
             <h3 className="text-lg font-semibold text-gray-800">
               Full Leaderboard
             </h3>
@@ -365,7 +366,7 @@ const TraineeLeaderboard = () => {
             {fullLeaderboard.map((user, index) => (
               <div
                 key={index}
-                className="p-6 flex items-center justify-between"
+                className="p-4 flex items-center justify-between"
               >
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full border-2 border-gray-300 border-dotted flex items-center justify-center">
@@ -404,6 +405,7 @@ const TraineeLeaderboard = () => {
               </div>
             ))}
           </div>
+        </div>
         </div>
       </div>
     </div>

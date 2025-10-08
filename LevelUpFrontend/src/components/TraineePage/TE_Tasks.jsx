@@ -221,19 +221,20 @@ const TraineeTasks = () => {
         </div>
       </header>
 
-      <div className="p-6">
+      <div className="max-w-6xl mx-auto">
+        <div className="p-4">
         {/* Welcome Section */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+        <div className="mb-6">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
             Welcome, {fullName}
           </h2>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-3 gap-4 mb-6">
             {stats.map((stat, index) => (
               <div
                 key={index}
-                className="bg-white rounded-xl p-6 shadow-sm border"
+                className="bg-white rounded-xl p-4 shadow-sm border"
               >
                 <div className="flex justify-between items-center">
                   <div>
@@ -249,13 +250,13 @@ const TraineeTasks = () => {
           </div>
 
           {/* Navigation Tabs */}
-          <div className="w-full bg-white rounded-xl p-1 shadow-sm border mb-8 flex">
+          <div className="w-full bg-white rounded-xl p-0.5 shadow-sm border mb-6 flex">
             {tabs.map((tab) => (
               <NavLink
                 key={tab.name}
                 to={tab.to}
                 className={({ isActive }) =>
-                  `flex-1 text-center rounded-lg font-medium text-sm px-8 py-3 transition-colors ${isActive
+                  `flex-1 text-center rounded-lg font-medium text-sm px-6 py-2 transition-colors ${isActive
                     ? "bg-gray-100 text-gray-900"
                     : "text-gray-600 hover:text-gray-900"
                   }`
@@ -268,12 +269,12 @@ const TraineeTasks = () => {
         </div>
 
         {/* Task Progress Section */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border mb-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
+        <div className="bg-white rounded-xl p-4 shadow-sm border mb-4">
+          <h3 className="text-lg font-semibold text-gray-800 mb-3">
             Task Progress
           </h3>
 
-          <div className="mb-4">
+          <div className="mb-3">
             <h4 className="text-sm font-medium text-gray-700 mb-2">
               Completed Tasks
             </h4>
@@ -290,11 +291,11 @@ const TraineeTasks = () => {
         </div>
 
         {/* Tasks List */}
-        <div className="space-y-4">
+        <div className="space-y-3">
           {tasks.map((task) => (
             <div
               key={task.id}
-              className="bg-white rounded-xl shadow-sm border p-6"
+              className="bg-white rounded-xl shadow-sm border p-4"
             >
               <div className="flex items-start gap-4">
                 {/* Checkmark Icon */}
@@ -340,6 +341,7 @@ const TraineeTasks = () => {
               </div>
             </div>
           ))}
+        </div>
         </div>
       </div>
     </div>

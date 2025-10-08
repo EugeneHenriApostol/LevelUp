@@ -222,15 +222,16 @@ const TrainerTasks = () => {
         </div>
       </div>
 
-      <div className="p-6">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+      <div className="max-w-6xl mx-auto">
+        <div className="p-4">
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
           Welcome, {fullName}
         </h2>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-3 gap-4 mb-6">
           {stats.map((stat, index) => (
-            <div key={index} className="bg-white rounded-xl p-6 shadow-sm border">
+            <div key={index} className="bg-white rounded-xl p-4 shadow-sm border">
               <div className="flex justify-between items-center">
                 <div>
                   <p className="text-gray-600 text-sm mb-2">{stat.title}</p>
@@ -243,24 +244,24 @@ const TrainerTasks = () => {
         </div>
 
         {/* ✅ Quick Actions */}
-        <div className="bg-blue-100 rounded-xl p-6 mb-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
-          <div className="grid grid-cols-3 gap-4">
+        <div className="bg-blue-100 rounded-xl p-4 mb-4">
+          <h3 className="text-lg font-semibold text-gray-800 mb-3">Quick Actions</h3>
+          <div className="grid grid-cols-3 gap-3">
             <button
               onClick={() => setIsModalOpen(true)}
-              className="bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg transition-colors text-sm"
+              className="bg-white hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors text-sm"
             >
               + Create New Task
             </button>
             <button
               onClick={exportToExcel}
-              className="bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg transition-colors text-sm"
+              className="bg-white hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors text-sm"
             >
               + Export Reports
             </button>
             <button
               onClick={() => handleViewSubmissions(tasks[0])}
-              className="bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg transition-colors text-sm"
+              className="bg-white hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors text-sm"
             >
               + View All Submissions
             </button>
@@ -268,13 +269,13 @@ const TrainerTasks = () => {
         </div>
 
         {/* Tabs */}
-        <div className="w-full bg-white rounded-xl p-1 shadow-sm border mb-8 flex">
+        <div className="w-full bg-white rounded-xl p-0.5 shadow-sm border mb-6 flex">
           {tabs.map((tab) => (
             <NavLink
               key={tab.name}
               to={tab.to}
               className={({ isActive }) =>
-                `flex-1 text-center rounded-lg font-medium text-sm px-8 py-3 transition-colors ${
+                `flex-1 text-center rounded-lg font-medium text-sm px-6 py-2 transition-colors ${
                   isActive
                     ? "bg-gray-100 text-gray-900"
                     : "text-gray-600 hover:text-gray-900"
@@ -287,13 +288,13 @@ const TrainerTasks = () => {
         </div>
 
         {/* Task List */}
-        <div className="space-y-4">
+        <div className="space-y-3">
           {tasks
             .filter((task) =>
               task.title.toLowerCase().includes(searchQuery.toLowerCase())
             )
             .map((task) => (
-              <div key={task.id} className="bg-white rounded-xl shadow-sm border p-6">
+              <div key={task.id} className="bg-white rounded-xl shadow-sm border p-4">
                 <div className="flex items-start gap-4">
                   <div className="mt-1">{task.icon}</div>
                   <div className="flex-1">
@@ -329,6 +330,7 @@ const TrainerTasks = () => {
                 </div>
               </div>
             ))}
+        </div>
         </div>
       </div>
 

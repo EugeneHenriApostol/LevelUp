@@ -10,8 +10,12 @@ import {
   CheckCircle,
   TrendingUp,
   TrendingDown,
+  CheckCircle2,
+  Circle,
 } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 import LevelUpLogo from "../../assets/LevelUp.png";
 
 const TrainerTrainees = () => {
@@ -47,6 +51,63 @@ const TrainerTrainees = () => {
     navigate("/editprofile"); // 👈 route to EditProfile.jsx
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewTask({ ...newTask, [name]: value });
+  };
+
+  const handleCreateTask = () => {
+    if (!newTask.title || !newTask.description) return;
+
+    const createdTask = {
+      id: tasks.length + 1,
+      title: newTask.title,
+      description: newTask.description,
+      status: "Pending",
+      statusColor: "text-red-500",
+      points: 10,
+      assignee: newTask.createdByName || "Unassigned",
+      dueDate: newTask.dueDate,
+      icon: <Circle className="w-5 h-5 text-blue-500" />,
+    };
+
+    setTasks([...tasks, createdTask]);
+    setNewTask({
+      taskId: "",
+      title: "",
+      description: "",
+      dueDate: "",
+      createdById: "",
+      createdByName: "",
+    });
+    setIsModalOpen(false);
+  };
+
+  const exportToExcel = () => {
+    const data = tasks.map((t) => ({
+      TaskId: t.id,
+      Title: t.title,
+      Description: t.description,
+      DueDate: t.dueDate,
+      Points: t.points,
+      Assignee: t.assignee,
+      Status: t.status,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Tasks");
+
+    const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+    saveAs(blob, "TaskReport.xlsx");
+  };
+
+  const handleViewSubmissions = (task) => {
+    setSelectedTask(task);
+    setIsSubmissionsModalOpen(true);
+  };
+
   useEffect(() => {
     const firstName = localStorage.getItem("firstName");
     const lastName = localStorage.getItem("lastName");
@@ -63,6 +124,57 @@ const TrainerTrainees = () => {
   };
 
   const [searchQuery, setSearchQuery] = useState("");
+
+  // ✅ Tasks state (can be updated when new tasks are created)
+  const [tasks, setTasks] = useState([
+    {
+      id: 1,
+      title: "Complete Database Schema Design",
+      description: "Design and document the database schema for e-commerce project.",
+      status: "Complete",
+      statusColor: "text-green-600",
+      points: 15,
+      assignee: "Malou Canedo",
+      dueDate: "DD/MM/YYYY",
+      icon: <CheckCircle2 className="w-5 h-5 text-green-500" />,
+    },
+    {
+      id: 2,
+      title: "Implement API",
+      description: "Build backend API endpoints for the project.",
+      status: "In-Progress",
+      statusColor: "text-blue-600",
+      points: 10,
+      assignee: "Zach Bihag",
+      dueDate: "DD/MM/YYYY",
+      icon: <Circle className="w-5 h-5 text-blue-500" />,
+    },
+  ]);
+
+  // ✅ Modal states
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmissionsModalOpen, setIsSubmissionsModalOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
+
+  // ✅ New task state
+  const [newTask, setNewTask] = useState({
+    taskId: "",
+    title: "",
+    description: "",
+    dueDate: "",
+    createdById: "",
+    createdByName: "",
+  });
+
+  // Sample submissions for demo
+  const sampleSubmissions = {
+    1: [
+      { trainee: "Emma Davis", submittedOn: "Sept 29, 2025", points: 20 },
+      { trainee: "John Smith", submittedOn: "Sept 30, 2025", points: 20 },
+    ],
+    2: [{ trainee: "Emma Davis", submittedOn: "Oct 4, 2025", points: 50 }],
+  };
+
   const tabs = [
     { name: "Overview", to: "/traineroverview" },
     { name: "Trainees", to: "/trainertrainees" },
@@ -234,19 +346,20 @@ const TrainerTrainees = () => {
         </div>
       </div>
 
-      <div className="p-6">
+      <div className="max-w-6xl mx-auto">
+        <div className="p-4">
         {/* Welcome Section */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-            Welcome, User
+        <div className="mb-6">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+            Welcome, {fullName}
           </h2>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-3 gap-4 mb-6">
             {stats.map((stat, index) => (
               <div
                 key={index}
-                className="bg-white rounded-xl p-6 shadow-sm border"
+                className="bg-white rounded-xl p-4 shadow-sm border"
               >
                 <div className="flex justify-between items-center">
                   <div>
@@ -262,31 +375,40 @@ const TrainerTrainees = () => {
           </div>
 
           {/* Quick Actions */}
-          <div className="bg-blue-100 rounded-xl p-6 mb-8">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">
+          <div className="bg-blue-100 rounded-xl p-4 mb-6">
+            <h3 className="text-lg font-semibold text-gray-800 mb-3">
               Quick Actions
             </h3>
-            <div className="grid grid-cols-3 gap-4">
-              <button className="bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg transition-colors text-sm">
+            <div className="grid grid-cols-3 gap-3">
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="bg-white hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors text-sm"
+              >
                 + Create New Task
               </button>
-              <button className="bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg transition-colors text-sm">
+              <button
+                onClick={exportToExcel}
+                className="bg-white hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors text-sm"
+              >
                 + Export Reports
               </button>
-              <button className="bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg transition-colors text-sm">
+              <button
+                onClick={() => handleViewSubmissions(tasks[0])}
+                className="bg-white hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors text-sm"
+              >
                 + View All Submissions
               </button>
             </div>
           </div>
 
           {/* Navigation Tabs */}
-          <div className="w-full bg-white rounded-xl p-1 shadow-sm border mb-8 flex">
+          <div className="w-full bg-white rounded-xl p-0.5 shadow-sm border mb-6 flex">
             {tabs.map((tab) => (
               <NavLink
                 key={tab.name}
                 to={tab.to}
                 className={({ isActive }) =>
-                  `flex-1 text-center rounded-lg font-medium text-sm px-8 py-3 transition-colors ${isActive
+                  `flex-1 text-center rounded-lg font-medium text-sm px-6 py-2 transition-colors ${isActive
                     ? "bg-gray-100 text-gray-900"
                     : "text-gray-600 hover:text-gray-900"
                   }`
@@ -299,7 +421,7 @@ const TrainerTrainees = () => {
         </div>
 
         {/* Search and Filter Section */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border mb-6">
+        <div className="bg-white rounded-xl p-4 shadow-sm border mb-4">
           <div className="flex gap-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -320,7 +442,7 @@ const TrainerTrainees = () => {
 
         {/* Trainees List */}
         <div className="bg-white rounded-xl shadow-sm border">
-          <div className="p-6 border-b">
+          <div className="p-4 border-b">
             <h3 className="text-lg font-semibold text-gray-800">
               All trainees (4)
             </h3>
@@ -330,7 +452,7 @@ const TrainerTrainees = () => {
             {trainees.map((trainee, index) => (
               <div
                 key={index}
-                className="p-6 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                className="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
               >
                 <div className="flex-1">
                   <div className="flex items-center gap-4">
@@ -404,7 +526,110 @@ const TrainerTrainees = () => {
             ))}
           </div>
         </div>
+        </div>
       </div>
+
+      {/* ✅ Create Task Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/10 z-50">
+          <div className="bg-white p-6 rounded-xl w-96 shadow-lg">
+            <h2 className="text-xl font-semibold mb-4">Create New Task</h2>
+            <div className="space-y-3">
+              <input
+                type="text"
+                name="taskId"
+                placeholder="Task ID"
+                value={newTask.taskId}
+                onChange={handleInputChange}
+                className="w-full border border-gray-300 rounded-md p-2"
+              />
+              <input
+                type="text"
+                name="title"
+                placeholder="Task Title"
+                value={newTask.title}
+                onChange={handleInputChange}
+                className="w-full border border-gray-300 rounded-md p-2"
+              />
+              <textarea
+                name="description"
+                placeholder="Task Description"
+                value={newTask.description}
+                onChange={handleInputChange}
+                className="w-full border border-gray-300 rounded-md p-2"
+              />
+              <input
+                type="date"
+                name="dueDate"
+                value={newTask.dueDate}
+                onChange={handleInputChange}
+                className="w-full border border-gray-300 rounded-md p-2"
+              />
+              <input
+                type="text"
+                name="createdById"
+                placeholder="Created By ID"
+                value={newTask.createdById}
+                onChange={handleInputChange}
+                className="w-full border border-gray-300 rounded-md p-2"
+              />
+              <input
+                type="text"
+                name="createdByName"
+                placeholder="Created By Name"
+                value={newTask.createdByName}
+                onChange={handleInputChange}
+                className="w-full border border-gray-300 rounded-md p-2"
+              />
+            </div>
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="px-4 py-2 bg-gray-200 rounded-md"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleCreateTask}
+                className="px-4 py-2 bg-blue-500 text-white rounded-md"
+              >
+                Create
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ✅ Submissions Modal */}
+      {isSubmissionsModalOpen && selectedTask && (
+        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/10 z-50">
+          <div className="bg-white p-6 rounded-xl w-96 shadow-lg max-h-[80vh] overflow-y-auto">
+            <h2 className="text-xl font-semibold mb-4">
+              Submissions for "{selectedTask.title}"
+            </h2>
+            <div className="space-y-2">
+              {(sampleSubmissions[selectedTask.id] || []).map((sub, idx) => (
+                <div
+                  key={idx}
+                  className="p-3 border rounded-md flex justify-between items-center"
+                >
+                  <span>{sub.trainee}</span>
+                  <span className="text-sm text-gray-500">{sub.submittedOn}</span>
+                  <span className="text-green-600 font-medium">{sub.points} pts</span>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 flex justify-end">
+              <button
+                onClick={() => setIsSubmissionsModalOpen(false)}
+                className="px-4 py-2 bg-gray-200 rounded-md"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
